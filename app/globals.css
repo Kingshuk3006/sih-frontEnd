@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Holtwood+One+SC&display=swap');
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  font-family: hammersmith;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@layer components {
+    .btn-primary {
+        @apply bg-bluePrimary  text-sm md:text-base md:px-8 px-4 py-2 rounded-full text-white active:scale-95 transition-all duration-500 hover:bg-blueDeep hover:text-white disabled:bg-slate-300 disabled:text-white;
+    }
+    .btn-secondary {
+        @apply bg-blueSecondary  text-sm md:text-base md:px-8 px-4 py-2 rounded-full text-blueDeep border-2 border-blueDeep hover:border-none active:scale-95 transition-all duration-500 hover:bg-bluePrimary hover:text-white;
+    }
+
+    .anchor-custom {
+        @apply underline underline-offset-4 text-bluePrimary text-base cursor-pointer;
+    }
+
+    .input-primary {
+        @apply bg-grey px-6 py-2 focus:outline-none text-light_grey font-light rounded-md;
+    }
+    .input-secondary {
+        @apply text-base rounded-lg border-[2px]  border-[#C1C1C1]  p-3  focus:outline-none w-full;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #555;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #212121;
+}
+
+.shadow-custom {
+    box-shadow: 2px 0px 12px -5px #484848bd;
+}
+
+.mapboxgl-canvas {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
