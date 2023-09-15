@@ -1,54 +1,27 @@
-// components/Home/ServicesSection.jsx
-// import React from "react";
-// import BgImg from "../../assets/Vector.svg";
-// import BgImg2 from "../../assets/Doctors-bro 1.svg";
-// import Arrow from "../../assets/Arrow 1.svg";
-// import { Link } from "react-router-dom";
+import React from 'react';
 
-const ServiceItem = ({ title, items }) => {
-    return (
-      <div className="service-item rounded-3xl h-[260px] px-10 py-4 flex flex-col justify-around bg-[#FFE6E2] drop-shadow-md hover:drop-shadow-lg">
-        <h3 className="text-center text-[#5717A9] text-xl font-semibold">
-          {title}
-        </h3>
-        <ul className="list-disc">
-          {items.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
+interface TestimonyCardProps {
+  imageSrc: string;
+  title: string;
+  content: string;
+  author: string;
+}
+
+export default function TestimonyCard({ imageSrc, title, content, author }: TestimonyCardProps) {
+  return (
+    <div className="max-w-md py-4 px-8 m-4 h-[272px] bg-white rounded-xl border border-black">
+      <div className="flex flex-row justify-between items-center">
+        <img src={imageSrc} alt={author} className="w-20 h-20 object-cover rounded-full" />
+        <h2 className="text-gray-800 h-20 w-64 flex items-center text-2xl">{title}</h2>
       </div>
-    );
-  };
-  
-  const TestimonyCard = () => {
-    const servicesData = [
-      {
-        title: "Mental Health",
-        items: [
-          "Anxiety",
-          "Depression",
-          "Stress",
-          "Grief & Loss",
-          "Postpartum",
-          "Mood Disorders",
-          "PTSD",
-        ],
-      },
-      // Add more services as needed...
-    ];
-  
-    return (
-          <div className="flex w-full justify-around">
-            {servicesData.map((service, index) => (
-              <ServiceItem
-                key={index}
-                title={service.title}
-                items={service.items}
-              />
-            ))}
-          </div>
-    );
-  };
-  
-  export default TestimonyCard;
-  
+      <div>
+        <p className="mt-8 h-[96px] text-gray-600">{content}</p>
+      </div>
+      <div className="flex justify-end">
+        <a href="#" className="text-xl font-medium text-indigo-500">
+          {author}
+        </a>
+      </div>
+    </div>
+  );
+}

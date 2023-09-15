@@ -2,7 +2,7 @@ import React from 'react'
 import TabComponent from './CustomTabs'
 export default function Benefits() {
     return (
-        <div id="benefits" className="bg-[#15B9FF] w-screen pt-24">
+        <div id="benefits" className="bg-[#15B9FF] w-screen py-24">
             <section>
                 <h1 className="text-3xl pl-8">Benefits</h1>
                 <div className=" flex flex-col-reverse gap-6 lg:flex-row flex-wrap items-start max-w-full m-auto py-12">
