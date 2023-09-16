@@ -13,35 +13,42 @@ const Navbar = () => {
     setOpen(!open);
   };
 
+  const menuItems = [
+    { href: '/#home', text: 'Home' },
+    { href: '/#benefits', text: 'Benefits' },
+    { href: '/#testimonial', text: 'Testimonial' },
+    { href: '/#contact', text: 'Contact Us' }
+  ];
+
   return (
     <div
-      className={`sticky top-0 z-50 px-4 py-4 w-screen justify-between items-center flex flex-row  ${
+      className={`sticky top-0 z-50 px-4 py-4 w-screen justify-between items-center flex ${
         open ? 'flex-col' : 'flex-row'
-      }  text-white font-semibold bg-[#221389] shadow-lg`}
+      } text-white font-semibold bg-[#221389] shadow-lg`}
     >
       <div className="flex justify-between items-center w-full">
         <div className="flex justify-between items-center gap-4">
           <Link href="/">
-            <img src="/Frame.svg" className="w-12" />
+            <img src="/Frame.svg" className="w-12" alt="Logo" />
           </Link>
-          <a href="/" className=" font-bold text-lg holtwood">
+          <a href="/" className="font-bold text-lg holtwood">
             DERMACURE.AI
           </a>
         </div>
 
-        <div className=" hidden md:flex md:items-center md:gap-3">
-          <ul className="cursor-pointer hover:scale-105 transition-all duration-150">
-            <a href="/#home">Home</a>
-          </ul>
-          <ul className="cursor-pointer hover:scale-105 transition-all duration-150">
-            <a href="/#benefits">Benefits</a>
-          </ul>
-          <ul className="cursor-pointer hover:scale-105 transition-all duration-150">
-            <a href="/#testimonial">Testimonial</a>
-          </ul>
-          <ul className="cursor-pointer hover:scale-105 transition-all duration-150">
-            <a href="/#contact">Contact Us</a>
-          </ul>
+        <div
+          className={`hidden md:flex md:items-center md:gap-3 ${
+            open ? 'hidden' : ''
+          }`}
+        >
+          {menuItems.map((item, index) => (
+            <ul
+              key={index}
+              className="cursor-pointer hover:scale-105 transition-all duration-150"
+            >
+              <a href={item.href}>{item.text}</a>
+            </ul>
+          ))}
           <ul>
             <Link href="/auth/login">
               <button className="h-[52px] w-[148px] rounded-3xl bg-white text-[#221389]">
@@ -51,7 +58,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        <div className="md:hidden ">
+        <div className="md:hidden">
           <button onClick={toggleMenu} className="block text-white">
             {open ? <ImCross /> : <GiHamburgerMenu />}
           </button>
@@ -63,19 +70,14 @@ const Navbar = () => {
           open ? 'block' : 'hidden'
         } w-full py-4 md:hidden flex flex-col items-center gap-2`}
       >
-        <ul className="cursor-pointer hover:scale-105 transition-all duration-150">
-          <a href="/#home">Home</a>
-        </ul>
-        <ul className="cursor-pointer hover:scale-105 transition-all duration-150">
-          <a href="/#benefits">Benefits</a>
-        </ul>
-        <ul className="cursor-pointer hover:scale-105 transition-all duration-150">
-          <a href="/#testimonial">Testimonial</a>
-        </ul>
-        <ul className="cursor-pointer hover:scale-105 transition-all duration-150">
-          <a href="/#contact">Contact Us</a>
-        </ul>
-        {/* You can add more menu items here */}
+        {menuItems.map((item, index) => (
+          <ul
+            key={index}
+            className="cursor-pointer hover:scale-105 transition-all duration-150"
+          >
+            <a href={item.href}>{item.text}</a>
+          </ul>
+        ))}
         <Link href="/auth/login">
           <button className="h-[52px] w-[148px] rounded-3xl bg-white text-[#221389]">
             Register/Login
