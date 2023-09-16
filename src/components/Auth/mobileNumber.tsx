@@ -1,16 +1,14 @@
-import { InputGroup, InputLeftAddon, Input } from "../../../lib/chakraui"
-import React, { useState } from "react";
-import { BsTelephone } from "react-icons/bs";
+import { InputGroup, InputLeftAddon, Input } from '../../../lib/chakraui';
+import React, { useState } from 'react';
+import { BsTelephone } from 'react-icons/bs';
 // import { sendOtp } from "@/functions/auth/sendOtp";
 
 const EnterMobileNumber = ({
   setIsOtpPage,
   setVerificationData,
   mobileNumber,
-  setMobileNumber,
+  setMobileNumber
 }: any) => {
-
-
   return (
     <div>
       <h1 className="text-2xl text-blueDeep font-semibold mb-2">
@@ -19,18 +17,18 @@ const EnterMobileNumber = ({
       <p className="text-sm font-light text-[#00184485] mb-4">
         An OTP will be sent to your mobile number for verification
       </p>
-      <InputGroup marginBottom={"10px"}>
+      <InputGroup marginBottom={'10px'}>
         <div className="p-3">
           <BsTelephone size={20} />
         </div>
         <Input
           type="number"
-          backgroundColor={"#FBFAFF"}
+          backgroundColor={'#FBFAFF'}
           focusBorderColor="#1A75FF"
           placeholder="Enter your Phone Number"
-          size={"md"}
+          size={'md'}
           fontSize="base"
-          onChange={(e) => setMobileNumber(e.target.value)}
+          onChange={e => setMobileNumber(e.target.value)}
         />
       </InputGroup>
       <button
