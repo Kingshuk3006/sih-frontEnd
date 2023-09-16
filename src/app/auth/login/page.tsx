@@ -16,7 +16,7 @@ const Login = () => {
   const [mobileNumber, setMobileNumber] = useState<string>()
 
   return (
-    <div className='min-h-screen bg-blueBackground'>
+    <div className='min-h-screen bg-[#76D6FF]'>
       <Navbar />
       <div className=' flex justify-center items-center h-[90vh]'>
         <div className='bg-white max-w-[70vw] shadow-xl p-6 rounded-3xl grid grid-cols-2 justify-items-stretch place-items-center gap-6'>
