@@ -12,7 +12,7 @@ export default function CustomTabs() {
                 <TabIndicator mt="-1.5px" height="2px" bg="white" borderRadius="1px" />
                 <TabPanels className='p-4'>
                     <TabPanel>
-                        <p>
+                        <div>
                             <ul className="flex flex-col gap-3 list-disc">
                                 <li>
                                     <span className="text-white not-italic font-normal leading-[148.5%] tracking-[1.875px] uppercase">
@@ -62,10 +62,10 @@ export default function CustomTabs() {
                                     </span>
                                 </li>
                             </ul>
-                        </p>
+                        </div>
                     </TabPanel>
                     <TabPanel>
-                        <p>
+                        <div>
                             <ul className="flex flex-col gap-3 list-disc">
                                 <li>
                                     <span className="text-white not-italic font-normal leading-[148.5%] tracking-[1.875px] uppercase">
@@ -114,7 +114,7 @@ export default function CustomTabs() {
                                     </span>
                                 </li>
                             </ul>
-                        </p>
+                        </div>
                     </TabPanel>
                 </TabPanels>
             </Tabs>
