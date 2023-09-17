@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 const BotsonicWidget = () => {
   useEffect(() => {
-    (function (w, d, s, o, f, js, fjs) {
+    (function (w: any, d: any, s: any, o: any, f: any, js, fjs) {
       w['botsonic_widget'] = o;
       w[o] =
         w[o] ||

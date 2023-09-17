@@ -2,7 +2,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import Navbar from '@/components/Homepage/Navbar.main';
+import Navbar from '@/components/Header/Navbar.main';
 import React, { useEffect, useState } from 'react';
 import EnterMobileNumber from '@/components/Auth/mobileNumber';
 import VerifyOtp from '@/components/Auth/verifyOtp';

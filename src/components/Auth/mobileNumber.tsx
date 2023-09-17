@@ -10,8 +10,8 @@ const EnterMobileNumber = ({
   setMobileNumber
 }: any) => {
   return (
-    <div>
-      <h1 className="text-2xl text-blueDeep font-semibold mb-2">
+    <div className="space-y-4">
+      <h1 className="text-2xl text-blueDeep font-semibold mb-2 ">
         Register or Sign In
       </h1>
       <p className="text-sm font-light text-[#00184485] mb-4">
@@ -32,13 +32,14 @@ const EnterMobileNumber = ({
         />
       </InputGroup>
       <button
-        className="btn-primary w-full rounded-md mb-8"
+        className=" btn-secondary w-full"
         disabled={mobileNumber?.length != 10}
-        // onClick={handleGetOtp}
+        onClick={() => setIsOtpPage(true)}
       >
         Get Otp
       </button>
       <p className="text-sm font-light text-[#00184485] mb-4">
+        <input type="checkbox" className="mr-2" />
         By Sign In/Registration, I agree to the Terms of Service and Privacy
         Policy
       </p>
