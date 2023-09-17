@@ -9,11 +9,11 @@ import {
   Input,
   Textarea // Import Textarea for Query Text/Feedback
 } from '../../../../lib/chakraui';
-import { Field, Form, Formik } from 'formik';
+import { Field, FieldProps, Form, Formik } from 'formik';
 
 export default function ContactForm() {
   // Validation function for Name
-  function validateName(value) {
+  function validateName(value: any) {
     let error;
     if (!value) {
       error = 'Name is Required';
@@ -22,7 +22,7 @@ export default function ContactForm() {
   }
 
   // Validation function for Email
-  function validateEmail(value) {
+  function validateEmail(value: string) {
     let error;
     if (!value) {
       error = 'Email is Required';
@@ -33,7 +33,7 @@ export default function ContactForm() {
   }
 
   // Validation function for Phone Number
-  function validatePhone(value) {
+  function validatePhone(value: string) {
     let error;
     if (!value) {
       error = 'Phone Number is Required';
@@ -44,7 +44,7 @@ export default function ContactForm() {
   }
 
   // Validation function for Query
-  function validateQuery(value) {
+  function validateQuery(value: any) {
     let error;
     if (!value) {
       error = 'Feedback is Required';
@@ -66,9 +66,12 @@ export default function ContactForm() {
       {props => (
         <Form>
           <Field name="name" validate={validateName}>
-            {({ field, form }) => (
+            {({ field, form }: FieldProps<any>) => (
               <FormControl
-                isInvalid={form.errors.name && form.touched.name}
+                isInvalid={
+                  (form.errors.name as unknown as boolean) &&
+                  (form.touched.name as boolean)
+                }
                 mb={4}
               >
                 <div className="flex justify-between items-center">
@@ -81,14 +84,19 @@ export default function ContactForm() {
                     className="w-[500px] bg-white border border-black hover:border-black"
                   />
                 </div>
-                <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+                <FormErrorMessage>
+                  {form.errors.name as unknown as string}
+                </FormErrorMessage>
               </FormControl>
             )}
           </Field>
           <Field name="email" validate={validateEmail}>
-            {({ field, form }) => (
+            {({ field, form }: FieldProps<any>) => (
               <FormControl
-                isInvalid={form.errors.email && form.touched.email}
+                isInvalid={
+                  (form.errors.email as unknown as boolean) &&
+                  (form.touched.email as unknown as boolean)
+                }
                 mb={4}
               >
                 <div className="flex justify-between items-center">
@@ -102,14 +110,19 @@ export default function ContactForm() {
                     className="w-[500px] bg-white border border-black hover:border-black"
                   />
                 </div>
-                <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                <FormErrorMessage>
+                  {form.errors.email as unknown as string}
+                </FormErrorMessage>
               </FormControl>
             )}
           </Field>
           <Field name="phone" validate={validatePhone}>
-            {({ field, form }) => (
+            {({ field, form }: FieldProps<any>) => (
               <FormControl
-                isInvalid={form.errors.phone && form.touched.phone}
+                isInvalid={
+                  (form.errors.phone as unknown as boolean) &&
+                  (form.touched.phone as unknown as boolean)
+                }
                 mb={4}
               >
                 <div className="flex justify-between items-center">
@@ -123,25 +136,31 @@ export default function ContactForm() {
                     className="w-[500px] bg-white border border-black hover:border-black"
                   />
                 </div>
-                <FormErrorMessage>{form.errors.phone}</FormErrorMessage>
+                <FormErrorMessage>
+                  {form.errors.phone as unknown as string}
+                </FormErrorMessage>
               </FormControl>
             )}
           </Field>
           <Field name="query" validate={validateQuery}>
-            {({ field, form }) => (
+            {({ field, form }: FieldProps<any>) => (
               <FormControl
-                isInvalid={form.errors.query && form.touched.query}
+                isInvalid={
+                  (form.errors.query as unknown as boolean) &&
+                  (form.touched.query as unknown as boolean)
+                }
                 mb={4}
               >
-                <div>
-                  <FormLabel className="text-xl m-0 p-0">Feedback</FormLabel>
-                  <Textarea
-                    {...field}
-                    id="query"
-                    className="w-full h-40 m-0 p-4 bg-white border border-black hover:border-black"
-                  />
-                </div>
-                <FormErrorMessage>{form.errors.query}</FormErrorMessage>
+                <FormLabel className="text-xl m-0 p-0">Feedback</FormLabel>
+                <Textarea
+                  {...field}
+                  id="query"
+                  className="w-full h-40 m-0 p-4 bg-white border border-black hover:border-black"
+                />
+
+                <FormErrorMessage>
+                  {form.errors.query as unknown as string}
+                </FormErrorMessage>
               </FormControl>
             )}
           </Field>
