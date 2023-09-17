@@ -1,39 +1,46 @@
-import './globals.css'
-import { Holtwood_One_SC } from 'next/font/google'
-import { Hammersmith_One } from 'next/font/google'
-import { Providers } from './providers'
-import Head from 'next/head'
+import './globals.css';
+import { Holtwood_One_SC } from 'next/font/google';
+import { Hammersmith_One } from 'next/font/google';
+import { Providers } from './providers';
+import Head from 'next/head';
 
 const holtwood = Holtwood_One_SC({
-    weight: ['400'],
-    style: ['normal'],
-    subsets: ['latin'],
-    display: 'swap',
-})
+  weight: ['400'],
+  style: ['normal'],
+  subsets: ['latin'],
+  display: 'swap'
+});
 
 const hammersmith = Hammersmith_One({
-    weight: ['400'],
-    style: ['normal'],
-    subsets: ['latin'],
-    display: 'swap',
-})
+  weight: ['400'],
+  style: ['normal'],
+  subsets: ['latin'],
+  display: 'swap'
+});
 
 export const metadata = {
-    title: 'DERMACURE.AI',
-    description: 'Made by team SIX-BYTE',
-}
+  title: 'DERMACURE.AI',
+  description: 'Made by team SIX-BYTE'
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-    return (
-        <html lang="en">
-            <Head>
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" />
-                <link href="https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap" rel="stylesheet" />
-            </Head>
-            <body className={hammersmith.className}>
-                <Providers>{children}</Providers>
-            </body>
-        </html>
-    )
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <body className={hammersmith.className}>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
 }

@@ -51,9 +51,7 @@ const Navbar = () => {
           ))}
           <ul>
             <Link href="/auth/login">
-              <button className="h-[52px] w-[148px] rounded-3xl bg-white text-[#221389]">
-                Register/Login
-              </button>
+              <button className="btn-primary">Register/Login</button>
             </Link>
           </ul>
         </div>
@@ -68,7 +66,7 @@ const Navbar = () => {
       <div
         className={`${
           open ? 'block' : 'hidden'
-        } w-full py-4 md:hidden flex flex-col items-center gap-2`}
+        } w-full py-4 md:hidden flex flex-col items-center gap-4`}
       >
         {menuItems.map((item, index) => (
           <ul
@@ -79,9 +77,7 @@ const Navbar = () => {
           </ul>
         ))}
         <Link href="/auth/login">
-          <button className="h-[52px] w-[148px] rounded-3xl bg-white text-[#221389]">
-            Register/Login
-          </button>
+          <button className="btn-primary">Register/Login</button>
         </Link>
       </div>
     </div>

@@ -6,38 +6,39 @@
 @tailwind utilities;
 
 body {
-    overflow-x: hidden;
-    width: 100%;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
-
 @layer components {
-   
+  .btn-primary {
+    @apply bg-white  text-sm md:text-base md:px-8 px-4 py-2 rounded-full text-black active:scale-95 transition-all duration-500 hover:bg-gray-800 hover:text-white disabled:bg-slate-300 disabled:text-white;
+  }
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
+  width: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #f1f1f1;
+  background: #f1f1f1;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #555;
+  background: #555;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #212121;
+  background: #212121;
 }
 
 .shadow-custom {
-    box-shadow: 2px 0px 12px -5px #484848bd;
+  box-shadow: 2px 0px 12px -5px #484848bd;
 }

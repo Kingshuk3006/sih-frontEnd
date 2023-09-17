@@ -20,7 +20,7 @@ export default function Benefits() {
         </h1>
       </div>
       <div className=" w-screen h-[vw] bg-gradient-to-b from-[#15B9FF] to-[#76D6FF]">
-        <img src="/Ellipse.png" alt="Gradient circle" className='w-screen'/>
+        <img src="/Ellipse.png" alt="Gradient circle" className="w-screen" />
       </div>
     </div>
   );
