@@ -1,231 +1,196 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+
+import React, { useEffect, useState, useRef } from 'react';
+import { loadModel } from '../../utils/loadmodel';
+import { NextPage } from 'next';
 import * as tf from '@tensorflow/tfjs';
+import '@tensorflow/tfjs';
 
-interface DetectedObject {
-  bbox: [number, number, number, number];
-  class: string;
-  score: number;
-}
-
-export default function ObjectDetectionModel() {
-  const canvasEle = useRef<HTMLCanvasElement | null>(null);
-  const imageEle = useRef<HTMLImageElement | null>(null);
-  const [objectDetector, setObjectDetector] = useState<tf.LayersModel | null>(
-    null
-  );
-  const [detectedObjects, setDetectedObjects] = useState<DetectedObject[]>([]);
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [path, setPath] = useState<string | null>(null);
-
-  const draw = (ctx: CanvasRenderingContext2D, objects: DetectedObject[]) => {
-    if (canvasEle.current && imageEle.current) {
-      canvasEle.current.width = imageEle.current.width;
-      canvasEle.current.height = imageEle.current.height;
-
-      ctx.fillStyle = '#000000';
-      ctx.fillRect(0, 0, imageEle.current.width, imageEle.current.height);
-
-      ctx.drawImage(
-        imageEle.current,
-        0,
-        0,
-        imageEle.current.width,
-        imageEle.current.height
-      );
-
-      for (let i = 0; i < objects.length; i += 1) {
-        ctx.fillStyle = 'rgba(0, 128, 0, 0.5)';
-        ctx.strokeStyle = 'white';
-        ctx.fillRect(
-          objects[i].bbox[0],
-          objects[i].bbox[1],
-          objects[i].bbox[2],
-          20
-        );
-
-        ctx.font = '16px Arial';
-        ctx.fillStyle = 'white';
-        ctx.fillText(
-          objects[i].class,
-          objects[i].bbox[0] + 4,
-          objects[i].bbox[1] + 16
-        );
-
-        ctx.beginPath();
-        ctx.rect(
-          objects[i].bbox[0],
-          objects[i].bbox[1],
-          objects[i].bbox[2],
-          objects[i].bbox[3]
-        );
-        ctx.strokeStyle = 'green';
-        ctx.stroke();
-        ctx.closePath();
-      }
-    }
-  };
-
-  const startDetecting = async () => {
-    if (!objectDetector || !imageEle.current) return;
-
-    const image = tf.browser.fromPixels(imageEle.current);
-    const preprocessedImage = image
-      .toFloat()
-      .div(255)
-      .reshape([1, ...image.shape]);
-
-    const predictions = objectDetector.predict(preprocessedImage) as tf.Tensor;
-
-    const predictionsData = (await predictions.array()) as number[][][];
-    const predictionObjects = predictionsData[0].map((prediction: number[]) => {
-      const [top, left, bottom, right] = prediction;
-      const width = right - left;
-      const height = bottom - top;
-      return {
-        bbox: [left, top, width, height],
-        class: 'Object', // Replace with your class label
-        score: 1.0 // You may need to adjust the score
-      };
-    });
-
-    setDetectedObjects(predictionObjects as DetectedObject[]);
-    if (predictionObjects.length > 0 && canvasEle.current) {
-      draw(
-        canvasEle.current.getContext('2d') as CanvasRenderingContext2D,
-        predictionObjects as DetectedObject[]
-      );
-    }
-  };
-
-  const loadObjectDetectionModel = async () => {
-    // const convertModelToJson = async () => {
-    //   const inputH5FilePath = '/public/model.h5'; // Replace with the correct path
-    //   const outputJsonFilePath = '/public/model.json'; // Replace with the desired output path
-
-    //   try {
-    //     await convertH5ToJSON(inputH5FilePath, outputJsonFilePath);
-    //     console.log('Model converted successfully');
-    //   } catch (error) {
-    //     console.error('Error converting model:', error);
-    //   }
-    // };
-
-    // useEffect(() => {
-    //   // Call the conversion function when the component is mounted
-    //   convertModelToJson();
-    // }, []);
-
-    try {
-      // Load your custom TensorFlow.js model (model.json and weights files)
-      const model = await tf.loadLayersModel('/model1.json'); // Replace with your model's path
-      setObjectDetector(model);
-      setIsLoading(false);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+const PredictPage: NextPage = () => {
+  const [model, setModel] = useState<tf.LayersModel | null>(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [prediction, setPrediction] = useState<string | null>(null);
+  const [useWebcam, setUseWebcam] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    loadObjectDetectionModel();
+    async function load() {
+      const loadedModel = await loadModel();
+      setModel(loadedModel);
+    }
+    load();
   }, []);
 
-  const setImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const image = event.target.files[0];
-      if (canvasEle.current) {
-        const canvas = canvasEle.current.getContext('2d');
-        if (canvas) {
-          canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
+  // Function to handle switching between image and webcam inputs
+  const toggleInput = () => {
+    setUseWebcam(!useWebcam);
+    if (useWebcam) {
+      stopWebcam();
+    } else {
+      startWebcam();
+    }
+  };
+  // handle image file upload
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setImage(imageUrl);
+      setUseWebcam(false); // Switch back to image input mode
+
+      // Load and preprocess the image
+      if (model && canvasRef.current) {
+        const img = new Image();
+        img.src = imageUrl;
+        img.onload = async () => {
+          const tensor = tf.browser.fromPixels(img);
+          const resized = tf.image.resizeBilinear(tensor, [28, 28]);
+          const expanded = resized.expandDims(0);
+          const normalized = expanded.div(255.0);
+
+          const predictions = (await (model as tf.LayersModel).predict(
+            normalized
+          )) as tf.Tensor;
+          const predictionData = await predictions.data();
+          const topClass = predictionData.indexOf(Math.max(...predictionData));
+
+          setPrediction(`Class ${topClass}`);
+
+          console.log('Prediction:', predictionData);
+        };
+      }
+    }
+  };
+
+  // Function to handle capturing an image from webcam
+  const captureImage = () => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      const context = canvas.getContext('2d');
+
+      if (context) {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const capturedImage = canvas.toDataURL('image/jpeg');
+        setImage(capturedImage);
+        setUseWebcam(false); // Switch back to image input mode
+
+        // Load and preprocess the captured image
+        if (model) {
+          const img = new Image();
+          img.src = capturedImage;
+          img.onload = async () => {
+            const tensor = tf.browser.fromPixels(img);
+            const resized = tf.image.resizeBilinear(tensor, [28, 28]);
+            const expanded = resized.expandDims(0);
+            const normalized = expanded.div(255.0);
+
+            const predictions = (await (model as tf.LayersModel).predict(
+              normalized
+            )) as tf.Tensor;
+            const predictionData = await predictions.data();
+            const topClass = predictionData.indexOf(
+              Math.max(...predictionData)
+            );
+
+            setPrediction(`Class ${topClass}`);
+          };
         }
       }
-      setUploadedImage(URL.createObjectURL(image));
+    }
+  };
+
+  // Function to start webcam
+  const startWebcam = async () => {
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true
+        });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          setUseWebcam(true);
+        }
+      } catch (error) {
+        console.error('Error accessing webcam:', error);
+      }
+    }
+  };
+
+  // Function to stop webcam
+  const stopWebcam = () => {
+    if (videoRef.current && videoRef.current.srcObject) {
+      const stream = videoRef.current.srcObject as MediaStream;
+      const tracks = stream.getTracks();
+      tracks.forEach(track => track.stop());
+      videoRef.current.srcObject = null;
+      setUseWebcam(false);
+    }
+  };
+
+  // Function to initiate model prediction
+  const startPrediction = async () => {
+    if (model && image) {
+      const img = new Image();
+      img.src = image;
+      img.onload = async () => {
+        const tensor = tf.browser.fromPixels(img);
+        const resized = tf.image.resizeBilinear(tensor, [224, 224]);
+        const expanded = resized.expandDims(0);
+        const normalized = expanded.div(255.0);
+
+        const predictions = (await (model as tf.LayersModel).predict(
+          normalized
+        )) as tf.Tensor;
+        const predictionData = await predictions.data();
+        const topClass = predictionData.indexOf(Math.max(...predictionData));
+
+        setPrediction(`Class ${topClass}`);
+      };
     }
   };
 
   return (
-    <>
-      {isLoading && (
-        <div className="text-center p-4">
-          Please wait while the model is loading...
+    <div>
+      <h1>TensorFlow.js Model Integration</h1>
+      <button onClick={toggleInput}>
+        {useWebcam ? 'Switch to Image' : 'Switch to Webcam'}
+      </button>
+      {useWebcam ? (
+        <div>
+          <video ref={videoRef} autoPlay width="224" height="224" />
+          <button onClick={captureImage}>Capture</button>
+        </div>
+      ) : (
+        <div>
+          {/* Add your image upload input here */}
+          <input type="file" accept="image/*" onChange={handleImageUpload} />
+          {image && <img src={image} alt="Captured" width="224" height="224" />}
         </div>
       )}
-      {!isLoading && (
-        <div className="container mx-auto p-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="border rounded-lg p-4">
-              {uploadedImage && (
-                <>
-                  <Image
-                    ref={imageEle}
-                    src={uploadedImage}
-                    alt="sample image"
-                    width={500}
-                    height={500}
-                    layout="responsive"
-                    objectFit="cover"
-                  />
-                  <canvas
-                    ref={canvasEle}
-                    className="mt-4"
-                    width={500}
-                    height={500}
-                  />
-                </>
-              )}
-              <div className="mt-4">
-                <label
-                  htmlFor="fileSelect"
-                  className="bg-blue-500 text-white p-2 rounded cursor-pointer hover:bg-blue-600"
-                >
-                  <span>
-                    <i className="bi bi-upload"></i>
-                  </span>
-                  Upload an image
-                </label>
-                <input id="fileSelect" type="file" onChange={setImage} hidden />
-              </div>
-              {uploadedImage && (
-                <button
-                  className="bg-green-500 text-white p-2 rounded mt-4 hover:bg-green-600"
-                  onClick={startDetecting}
-                >
-                  Start detection
-                </button>
-              )}
-            </div>
-            <div className="border rounded-lg p-4">
-              <h3 className="text-lg font-semibold mb-4">Results</h3>
-              <ul>
-                {detectedObjects.length > 0 ? (
-                  detectedObjects.map((data, index) => (
-                    <li key={`${data.class}-${index}`} className="mb-2">
-                      <p className="font-semibold">
-                        Object {index + 1}:{' '}
-                        <span className="font-normal">{data.class}</span>
-                      </p>
-                      <p>
-                        Confidence:{' '}
-                        <span className="font-semibold">
-                          {Math.abs(data.score * 100).toFixed(2)}%
-                        </span>
-                      </p>
-                    </li>
-                  ))
-                ) : (
-                  <>
-                    {imageEle.current && (
-                      <li className="text-gray-500">No Results Found</li>
-                    )}
-                  </>
-                )}
-              </ul>
-            </div>
-          </div>
+      {image && (
+        <div>
+          <button onClick={startPrediction}>Start Predicting</button>
         </div>
       )}
-    </>
+      {prediction !== null && (
+        <div>
+          <h2>Model Prediction:</h2>
+          <p>{prediction}</p>
+        </div>
+      )}
+      <canvas
+        ref={canvasRef}
+        style={{ display: 'none' }}
+        width="224"
+        height="224"
+      />
+    </div>
   );
-}
+};
+
+export default PredictPage;
