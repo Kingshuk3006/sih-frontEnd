@@ -31,9 +31,9 @@ const Navbar = () => {
           <Link href="/">
             <img src="/Frame.svg" className="w-12" alt="Logo" />
           </Link>
-          <a href="/" className="font-bold text-lg holtwood">
+          <Link href="/" className="font-bold text-lg holtwood">
             DERMACURE.AI
-          </a>
+          </Link>
         </div>
 
         <div
@@ -46,7 +46,7 @@ const Navbar = () => {
               key={index}
               className="cursor-pointer hover:scale-105 transition-all duration-150"
             >
-              <a href={item.href}>{item.text}</a>
+              <Link href={item.href}>{item.text}</Link>
             </ul>
           ))}
           <ul>
@@ -73,7 +73,7 @@ const Navbar = () => {
             key={index}
             className="cursor-pointer hover:scale-105 transition-all duration-150"
           >
-            <a href={item.href}>{item.text}</a>
+            <Link href={item.href}>{item.text}</Link>
           </ul>
         ))}
         <Link href="/auth/login">

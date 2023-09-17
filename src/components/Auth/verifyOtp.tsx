@@ -15,6 +15,10 @@ const VerifyOtp = ({ verificationData, mobileNumber }: any) => {
       }, 1000);
   }, [timer]);
 
+  const handleVerifyOtp = async () => {
+    router.push('/dashboard');
+  };
+
   return (
     <div>
       <h1 className="text-2xl text-blueDeep font-semibold mb-2">
@@ -46,8 +50,9 @@ const VerifyOtp = ({ verificationData, mobileNumber }: any) => {
         </p>
       )}
       <button
-        className="btn-primary w-full rounded-md mb-8"
+        className="btn-secondary w-full"
         disabled={otpEntered?.length !== 6}
+        onClick={handleVerifyOtp}
       >
         Verify OTP & Proceed
       </button>

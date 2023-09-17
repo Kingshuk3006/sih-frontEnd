@@ -48,12 +48,13 @@ const PredictPage: NextPage = () => {
         img.src = imageUrl;
         img.onload = async () => {
           const tensor = tf.browser.fromPixels(img);
-          const resized = tf.image.resizeBilinear(tensor, [28, 28]);
+          const resized2 = tf.image.resizeBilinear(tensor, [28, 28]);
+          const resized = tf.reshape(resized2, [-1, 28, 28, 3]);
           const expanded = resized.expandDims(0);
           const normalized = expanded.div(255.0);
 
           const predictions = (await (model as tf.LayersModel).predict(
-            normalized
+            resized
           )) as tf.Tensor;
           const predictionData = await predictions.data();
           const topClass = predictionData.indexOf(Math.max(...predictionData));
@@ -85,12 +86,13 @@ const PredictPage: NextPage = () => {
           img.src = capturedImage;
           img.onload = async () => {
             const tensor = tf.browser.fromPixels(img);
-            const resized = tf.image.resizeBilinear(tensor, [28, 28]);
+            const resized2 = tf.image.resizeBilinear(tensor, [28, 28]);
+            const resized = tf.reshape(resized2, [-1, 28, 28, 3]);
             const expanded = resized.expandDims(0);
             const normalized = expanded.div(255.0);
 
             const predictions = (await (model as tf.LayersModel).predict(
-              normalized
+              resized
             )) as tf.Tensor;
             const predictionData = await predictions.data();
             const topClass = predictionData.indexOf(
@@ -139,17 +141,19 @@ const PredictPage: NextPage = () => {
       img.src = image;
       img.onload = async () => {
         const tensor = tf.browser.fromPixels(img);
-        const resized = tf.image.resizeBilinear(tensor, [224, 224]);
+        const resized2 = tf.image.resizeBilinear(tensor, [28, 28]);
+        const resized = tf.reshape(resized2, [-1, 28, 28, 3]);
         const expanded = resized.expandDims(0);
-        const normalized = expanded.div(255.0);
+        //const normalized = expanded.div(255.0);
 
         const predictions = (await (model as tf.LayersModel).predict(
-          normalized
+          resized
         )) as tf.Tensor;
         const predictionData = await predictions.data();
         const topClass = predictionData.indexOf(Math.max(...predictionData));
 
         setPrediction(`Class ${topClass}`);
+        console.log('Prediction:', predictionData);
       };
     }
   };
