@@ -5,6 +5,7 @@ import { loadModel } from '../../utils/loadmodel';
 import { NextPage } from 'next';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs';
+import { Class } from '../../database/diesease';
 
 const PredictPage: NextPage = () => {
   const [model, setModel] = useState<tf.LayersModel | null>(null);
@@ -13,6 +14,7 @@ const PredictPage: NextPage = () => {
   const [useWebcam, setUseWebcam] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [diesease, setDiesease] = useState<number | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -43,27 +45,7 @@ const PredictPage: NextPage = () => {
       setUseWebcam(false); // Switch back to image input mode
 
       // Load and preprocess the image
-      if (model && canvasRef.current) {
-        const img = new Image();
-        img.src = imageUrl;
-        img.onload = async () => {
-          const tensor = tf.browser.fromPixels(img);
-          const resized2 = tf.image.resizeBilinear(tensor, [28, 28]);
-          const resized = tf.reshape(resized2, [-1, 28, 28, 3]);
-          const expanded = resized.expandDims(0);
-          const normalized = expanded.div(255.0);
-
-          const predictions = (await (model as tf.LayersModel).predict(
-            resized
-          )) as tf.Tensor;
-          const predictionData = await predictions.data();
-          const topClass = predictionData.indexOf(Math.max(...predictionData));
-
-          setPrediction(`Class ${topClass}`);
-
-          console.log('Prediction:', predictionData);
-        };
-      }
+      startPrediction();
     }
   };
 
@@ -81,27 +63,7 @@ const PredictPage: NextPage = () => {
         setUseWebcam(false); // Switch back to image input mode
 
         // Load and preprocess the captured image
-        if (model) {
-          const img = new Image();
-          img.src = capturedImage;
-          img.onload = async () => {
-            const tensor = tf.browser.fromPixels(img);
-            const resized2 = tf.image.resizeBilinear(tensor, [28, 28]);
-            const resized = tf.reshape(resized2, [-1, 28, 28, 3]);
-            const expanded = resized.expandDims(0);
-            const normalized = expanded.div(255.0);
-
-            const predictions = (await (model as tf.LayersModel).predict(
-              resized
-            )) as tf.Tensor;
-            const predictionData = await predictions.data();
-            const topClass = predictionData.indexOf(
-              Math.max(...predictionData)
-            );
-
-            setPrediction(`Class ${topClass}`);
-          };
-        }
+        startPrediction();
       }
     }
   };
@@ -153,6 +115,7 @@ const PredictPage: NextPage = () => {
         const topClass = predictionData.indexOf(Math.max(...predictionData));
 
         setPrediction(`Class ${topClass}`);
+        setDiesease(topClass);
         console.log('Prediction:', predictionData);
       };
     }
@@ -184,7 +147,7 @@ const PredictPage: NextPage = () => {
       {prediction !== null && (
         <div>
           <h2>Model Prediction:</h2>
-          <p>{prediction}</p>
+          <p>{Class[diesease as number]}</p>
         </div>
       )}
       <canvas
