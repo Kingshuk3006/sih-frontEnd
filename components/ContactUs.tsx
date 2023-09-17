@@ -12,12 +12,15 @@ export default function ContactUs() {
                          for our team?Reach out and we will respond 
                         as soon as possible.
                   </h2>
+                  <div className="md:w-[17%] md:mb-6 lg:w-[20%] mb-12">
+                        <img src="/login.png" text-center alt="skin" className='sm:pr-8'/>
+                    </div>
             
            <div className='w-2/4'>
-                  <p className="text-right text-lg mb-2">Name*</p>
-                  
+                  <p className="text-lg mb-2 text-center">Name*</p>
+                  <div className="text-center">
                   <Input
-                  
+                    className="text-center"
                     borderColor={'gray.500'}
                    // onChange={(e: any) => setName(e.target.value)}
                     //value={name}
@@ -25,11 +28,14 @@ export default function ContactUs() {
                     focusBorderColor="purple.500"
                     placeholder="Enter Your Name"
                   ></Input>
-                
+                  </div>
             </div>
             <div className='w-2/4'>
-                  <p className="text-lg mb-2">Email*</p>
+                  <p className="text-lg mb-2 text-center">Email*</p>
+                  <div className="center">
+
                   <Input
+                    className="text-center"
                     borderColor={'gray.500'}
                    // onChange={(e: any) => setName(e.target.value)}
                     //value={name}
@@ -37,10 +43,12 @@ export default function ContactUs() {
                     focusBorderColor="purple.500"
                     placeholder="Enter Your Email-id"
                   ></Input>
-                </div>
+                  </div>
+             </div>
             <div className='w-2/4'>
-                  <p className="text-lg mb-2">Phone no*</p>
+                  <p className="text-lg mb-2 text-center">Phone no*</p>
                   <Input
+                    className="text-center"
                     borderColor={'gray.500'}
                    // onChange={(e: any) => setName(e.target.value)}
                     //value={name}
@@ -50,8 +58,9 @@ export default function ContactUs() {
                   ></Input>
                 </div>
             <div className='w-2/4'>
-                  <p className="text-lg mb-2">Queries*</p>
+                  <p className="text-lg mb-2 text-center">Queries*</p>
                   <Input
+                    className="text-center"
                     borderColor={'gray.500'}
                    // onChange={(e: any) => setName(e.target.value)}
                     //value={name}
@@ -60,6 +69,7 @@ export default function ContactUs() {
                     placeholder="Enter your queries"
                   ></Input>
                 </div>
+            
             
                 
                   <button
