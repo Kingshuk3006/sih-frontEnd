@@ -14,8 +14,10 @@ export default function ContactUs() {
                   </h2>
             
            <div className='w-2/4'>
-                  <p className="text-lg mb-2">Name*</p>
+                  <p className="text-right text-lg mb-2">Name*</p>
+                  
                   <Input
+                  
                     borderColor={'gray.500'}
                    // onChange={(e: any) => setName(e.target.value)}
                     //value={name}
@@ -23,7 +25,8 @@ export default function ContactUs() {
                     focusBorderColor="purple.500"
                     placeholder="Enter Your Name"
                   ></Input>
-                </div>
+                
+            </div>
             <div className='w-2/4'>
                   <p className="text-lg mb-2">Email*</p>
                   <Input
@@ -57,7 +60,7 @@ export default function ContactUs() {
                     placeholder="Enter your queries"
                   ></Input>
                 </div>
-            <div className='w-1/4' >
+            
                 
                   <button
                     borderColor={'gray.500'}
@@ -67,7 +70,8 @@ export default function ContactUs() {
                     focusBorderColor="blue.500"
                     placeholder="Schedule Consult"
                   ></button>
-              </div>
+              
+              
             
     </div>
   )
