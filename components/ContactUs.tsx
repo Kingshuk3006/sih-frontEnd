@@ -5,14 +5,14 @@ export default function ContactUs() {
   return (
     <div id='contact' className='bg-[#15B9FF] screen w-screen pt-20'>
         
-        
-              <h3 className="text-center " > Contact Us</h3>
-        
-           <p className='text-center'> Ready to get started,or have a question
-            for our team?Reach out and we will respond 
-            as soon as possible.
-           </p>
-        
+             
+                  <h3 className="text-center  text-[#221389] text-4xl pl-8" > Contact Us</h3>
+              
+                  <h2 className="text-center text-[#FFFFFF]  text-1xl pl-8" >Ready to get started,or have a question
+                         for our team?Reach out and we will respond 
+                        as soon as possible.
+                  </h2>
+            
            <div className='w-2/4'>
                   <p className="text-lg mb-2">Name*</p>
                   <Input
