@@ -3,11 +3,11 @@ import React from 'react'
 
 export default function ContactUs() {
   return (
-    <div id='contact' className='bg-blue-300 h-screen w-screen pt-20'>
+    <div id='contact' className='bg-[#15B9FF] screen w-screen pt-20'>
         
-        <div className='w-2/4'>
-              <h3 className='text-center'> Contact Us</h3>
-        </div>
+        
+              <h3 className="text-center " > Contact Us</h3>
+        
            <p className='text-center'> Ready to get started,or have a question
             for our team?Reach out and we will respond 
             as soon as possible.
@@ -57,16 +57,16 @@ export default function ContactUs() {
                     placeholder="Enter your queries"
                   ></Input>
                 </div>
-            <div className='w-1/4'>
+            <div className='w-1/4' >
                 
-                  <Input
+                  <button
                     borderColor={'gray.500'}
                    // onChange={(e: any) => setName(e.target.value)}
                     //value={name}
                     backgroundColor={'#C726FF'}
                     focusBorderColor="blue.500"
                     placeholder="Schedule Consult"
-                  ></Input>
+                  ></button>
               </div>
             
     </div>
