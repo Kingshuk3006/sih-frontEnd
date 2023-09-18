@@ -21,7 +21,7 @@ const Model = () => {
   const [isloadingDiesease, setIsloadingDiesease] = useState<boolean>(false);
   const [pdfGenerated, setPdfGenerated] = useState(false);
   const [pdfBlob, setPdfBlob] = useState<any>(null);
-  const {user} = useUser()
+  const { user } = useUser();
 
   const generatePDF = async (dis: string) => {
     try {
@@ -52,28 +52,28 @@ const Model = () => {
         x: padding,
         y: 450,
         size: fontSize,
-        color: rgb(0, 0, 0),
+        color: rgb(0, 0, 0)
       });
 
       page.drawText(age, {
         x: padding,
         y: 450 - fontSize - 10,
         size: fontSize,
-        color: rgb(0, 0, 0),
+        color: rgb(0, 0, 0)
       });
 
       page.drawText(sex, {
         x: padding,
         y: 450 - 2 * (fontSize + 10),
         size: fontSize,
-        color: rgb(0, 0, 0),
+        color: rgb(0, 0, 0)
       });
 
       page.drawText(disease, {
         x: padding,
         y: 450 - 3 * (fontSize + 10),
         size: fontSize,
-        color: rgb(0, 0, 0),
+        color: rgb(0, 0, 0)
       });
 
       // Create a new PDF buffer
@@ -101,8 +101,6 @@ const Model = () => {
       downloadLink.click();
     }
   };
-
-
 
   useEffect(() => {
     async function load() {
@@ -207,10 +205,9 @@ const Model = () => {
         setPrediction(`Class ${topClass}`);
         setDiesease(topClass);
         setIsloadingDiesease(false);
-        generatePDF(Class[diesease as number])
+        generatePDF(Class[diesease as number]);
       };
     }
-    
   };
 
   return (
@@ -255,7 +252,6 @@ const Model = () => {
                   Upload Image
                 </label>
                 {image && (
-
                   <img
                     src={image}
                     alt="Captured"
@@ -285,14 +281,15 @@ const Model = () => {
                       <p className="text-blue-800 text-xl">
                         {Class[diesease as number]}
                       </p>
-                      <button onClick={downloadPDF} className='btn-secondary'>Download Report</button>
+                      <button onClick={downloadPDF} className="btn-secondary">
+                        Download Report
+                      </button>
                     </div>
                   )}
                 </>
               )}
             </div>
           )}
-
 
           <canvas
             ref={canvasRef}

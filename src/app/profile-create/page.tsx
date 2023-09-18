@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import {Input, Select} from '../../../lib/chakraui'
-import { useRouter } from "next/navigation";
-import Navbar from "@/components/Header/Navbar.main";
+import React, { useEffect, useState } from 'react';
+import { Input, Select } from '../../../lib/chakraui';
+import { useRouter } from 'next/navigation';
+import Navbar from '@/components/Header/Navbar.main';
 
 const CreateProfile = () => {
   const [userData, setUserData] = useState({
-    name:"",
-    role:"",
-    age:"",
-    sex:"",
+    name: '',
+    role: '',
+    age: '',
+    sex: ''
   });
   const router = useRouter();
 
   const validateForm = () => {
     if (
-      userData.name === "" || 
-      userData.role === "" ||
-      userData.age === "" ||
-      userData.sex === ""
+      userData.name === '' ||
+      userData.role === '' ||
+      userData.age === '' ||
+      userData.sex === ''
     ) {
       return false;
     } else {
@@ -32,12 +32,11 @@ const CreateProfile = () => {
       name: userData.name,
       age: userData.age,
       sex: userData.sex,
-      role: userData.role,
+      role: userData.role
     };
 
-    window.localStorage.setItem("userData", JSON.stringify(data));
-    router.push('/dashboard')
-
+    window.localStorage.setItem('userData', JSON.stringify(data));
+    router.push('/dashboard');
   };
 
   return (
@@ -50,16 +49,16 @@ const CreateProfile = () => {
             <h2 className="font-medium mb-2">Name</h2>
             <Input
               type="text"
-              backgroundColor={"#FBFAFF"}
+              backgroundColor={'#FBFAFF'}
               focusBorderColor="#1A75FF"
               placeholder="Enter your Name"
-              size={"md"}
+              size={'md'}
               value={userData.name}
-              onChange={(e) =>
+              onChange={e =>
                 setUserData((prev: any) => {
                   return {
                     ...prev,
-                    name: e.target.value,
+                    name: e.target.value
                   };
                 })
               }
@@ -69,44 +68,40 @@ const CreateProfile = () => {
           <section>
             <h2 className="font-medium mb-2">Role</h2>
             <Select
-              backgroundColor={"#FBFAFF"}
+              backgroundColor={'#FBFAFF'}
               focusBorderColor="#1A75FF"
               placeholder="--select--"
-              size={"md"}
+              size={'md'}
               value={userData.role}
-              onChange={(e) =>
+              onChange={e =>
                 setUserData((prev: any) => {
                   return {
                     ...prev,
-                    role: e.target.value,
+                    role: e.target.value
                   };
                 })
               }
               fontSize="base"
             >
-              <option>
-                Doctor
-              </option>
-              <option>
-                Patient
-              </option>
+              <option>Doctor</option>
+              <option>Patient</option>
             </Select>
           </section>
           <section>
             <h2 className="font-medium mb-2">Age</h2>
             <Input
               type="number"
-              backgroundColor={"#FBFAFF"}
+              backgroundColor={'#FBFAFF'}
               focusBorderColor="#1A75FF"
               placeholder="Enter your Age"
-              size={"md"}
+              size={'md'}
               fontSize="base"
               value={userData.age}
-              onChange={(e) =>
+              onChange={e =>
                 setUserData((prev: any) => {
                   return {
                     ...prev,
-                    age: e.target.value,
+                    age: e.target.value
                   };
                 })
               }
@@ -115,16 +110,16 @@ const CreateProfile = () => {
           <section>
             <h2 className="font-medium mb-2">Gender</h2>
             <Select
-              backgroundColor={"#FBFAFF"}
+              backgroundColor={'#FBFAFF'}
               placeholder="--select--"
               focusBorderColor="#1A75FF"
-              size={"md"}
+              size={'md'}
               value={userData.sex}
-              onChange={(e) =>
+              onChange={e =>
                 setUserData((prev: any) => {
                   return {
                     ...prev,
-                    sex: e.target.value,
+                    sex: e.target.value
                   };
                 })
               }
@@ -135,7 +130,7 @@ const CreateProfile = () => {
               <option>Trans</option>
             </Select>
           </section>
-         
+
           <button
             className="btn-secondary w-full rounded-md"
             disabled={!validateForm()}

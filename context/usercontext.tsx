@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
 import {
-    Dispatch,
+  Dispatch,
   SetStateAction,
   useCallback,
   useEffect,
-  useState,
-} from "react";
+  useState
+} from 'react';
 
-import React, { useContext } from "react";
-import { CircularProgress } from "@chakra-ui/react";
+import React, { useContext } from 'react';
+import { CircularProgress } from '@chakra-ui/react';
 
 interface IDefaultValues {
   user: null | any;
@@ -18,7 +18,7 @@ interface IDefaultValues {
 
 const defaultValues: IDefaultValues = {
   user: null,
-  setUser: () => {},
+  setUser: () => {}
 };
 
 const userContext = React.createContext(defaultValues);
@@ -32,16 +32,13 @@ export function UserContextProvider({ children }: any) {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-
   useEffect(() => {
-    
-    let _data = window.localStorage.getItem("userData")
+    let _data = window.localStorage.getItem('userData');
     if (_data) {
-      let data = JSON.parse(_data)
-      setUser(data)
+      let data = JSON.parse(_data);
+      setUser(data);
     }
   }, []);
-
 
   return (
     <>
