@@ -37,6 +37,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Holtwood+One+SC&display=swap"
           rel="stylesheet"
         />
+        <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
       </Head>
       <body className={hammersmith.className}>
         <Providers>{children}</Providers>

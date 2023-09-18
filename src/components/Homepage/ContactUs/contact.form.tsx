@@ -64,7 +64,7 @@ export default function ContactForm() {
       }}
     >
       {props => (
-        <Form>
+        <Form className='flex flex-col gap-3'>
           <Field name="name" validate={validateName}>
             {({ field, form }: FieldProps<any>) => (
               <FormControl
