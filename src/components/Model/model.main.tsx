@@ -6,6 +6,8 @@ import { NextPage } from 'next';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs';
 import { Class } from '../../database/diesease';
+import { PDFDocument, rgb } from 'pdf-lib';
+import { useUser } from '../../../context/usercontext';
 
 const Model = () => {
   const [model, setModel] = useState<tf.LayersModel | null>(null);
@@ -17,6 +19,90 @@ const Model = () => {
   const [diesease, setDiesease] = useState<number | null>(null);
   const [isloading, setIsloading] = useState<boolean>(true);
   const [isloadingDiesease, setIsloadingDiesease] = useState<boolean>(false);
+  const [pdfGenerated, setPdfGenerated] = useState(false);
+  const [pdfBlob, setPdfBlob] = useState<any>(null);
+  const {user} = useUser()
+
+  const generatePDF = async (dis: string) => {
+    try {
+      // Create a new PDF document
+      const pdfDoc = await PDFDocument.create();
+
+      // Add a new page to the PDF
+      const page = pdfDoc.addPage([400, 400]);
+      // const logoImage = await pdfDoc.embedPng(fs.readFileSync('logo.png'));
+      // const logoDims = logoImage.scale(0.2);
+      // Draw text on the page
+      // page.drawImage(logoImage, {
+      //   x: 50,
+      //   y: 500,
+      //   width: logoDims.width,
+      //   height: logoDims.height,
+      // });
+
+      // Patient information
+      const fontSize = 16;
+      const padding = 20;
+      const patientName = `Patient: ${user.name}`;
+      const age = `Age: ${user.age}`;
+      const sex = `Sex: ${user.sex}`;
+      const disease = `Disease: ${dis}`;
+
+      page.drawText(patientName, {
+        x: padding,
+        y: 450,
+        size: fontSize,
+        color: rgb(0, 0, 0),
+      });
+
+      page.drawText(age, {
+        x: padding,
+        y: 450 - fontSize - 10,
+        size: fontSize,
+        color: rgb(0, 0, 0),
+      });
+
+      page.drawText(sex, {
+        x: padding,
+        y: 450 - 2 * (fontSize + 10),
+        size: fontSize,
+        color: rgb(0, 0, 0),
+      });
+
+      page.drawText(disease, {
+        x: padding,
+        y: 450 - 3 * (fontSize + 10),
+        size: fontSize,
+        color: rgb(0, 0, 0),
+      });
+
+      // Create a new PDF buffer
+      const pdfBytes = await pdfDoc.save();
+
+      // Convert PDF buffer to a Blob
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+      // Set the PDF Blob and PDF generation state
+      setPdfBlob(blob);
+      setPdfGenerated(true);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
+
+  const downloadPDF = () => {
+    if (pdfBlob) {
+      // Create a download link for the PDF Blob
+      const downloadLink = document.createElement('a');
+      downloadLink.href = URL.createObjectURL(pdfBlob);
+      downloadLink.download = 'generated-pdf.pdf';
+
+      // Trigger a click on the link to download the PDF
+      downloadLink.click();
+    }
+  };
+
+
 
   useEffect(() => {
     async function load() {
@@ -121,9 +207,10 @@ const Model = () => {
         setPrediction(`Class ${topClass}`);
         setDiesease(topClass);
         setIsloadingDiesease(false);
-        console.log('Prediction:', predictionData);
+        generatePDF(Class[diesease as number])
       };
     }
+    
   };
 
   return (
@@ -168,6 +255,7 @@ const Model = () => {
                   Upload Image
                 </label>
                 {image && (
+
                   <img
                     src={image}
                     alt="Captured"
@@ -192,17 +280,19 @@ const Model = () => {
               ) : (
                 <>
                   {prediction !== null && (
-                    <div className="mt-4">
+                    <div className="mt-4 flex items-center gap-4">
                       <h2 className="text-xl font-bold">Model Prediction:</h2>
-                      <p className="text-blue-800">
+                      <p className="text-blue-800 text-xl">
                         {Class[diesease as number]}
                       </p>
+                      <button onClick={downloadPDF} className='btn-secondary'>Download Report</button>
                     </div>
                   )}
                 </>
               )}
             </div>
           )}
+
 
           <canvas
             ref={canvasRef}
