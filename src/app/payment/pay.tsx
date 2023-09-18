@@ -1,5 +1,19 @@
+// Import React and useEffect
 'use client';
+
 import React, { useEffect } from 'react';
+
+// Extend the global JSX namespace to include the custom element
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'stripe-pricing-table': React.DetailedHTMLProps<
+        React.HTMLAttributes<HTMLElement>,
+        HTMLElement
+      >;
+    }
+  }
+}
 
 const StripePricingTable = () => {
   useEffect(() => {
