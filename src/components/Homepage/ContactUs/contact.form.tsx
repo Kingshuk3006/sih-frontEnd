@@ -152,7 +152,7 @@ export default function ContactForm() {
                 mb={4}
               >
                 <FormLabel className="text-xl m-0 p-0">Feedback</FormLabel>
-                <Textarea
+                <Input
                   {...field}
                   id="query"
                   className="w-full h-40 m-0 p-4 bg-white border border-black hover:border-black"
