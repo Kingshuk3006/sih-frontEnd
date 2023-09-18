@@ -8,7 +8,9 @@ import { UserContextProvider } from '../../context/usercontext';
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <CacheProvider>
-      <ChakraProvider><UserContextProvider>{children}</UserContextProvider></ChakraProvider>
+      <ChakraProvider>
+        <UserContextProvider>{children}</UserContextProvider>
+      </ChakraProvider>
     </CacheProvider>
   );
 }

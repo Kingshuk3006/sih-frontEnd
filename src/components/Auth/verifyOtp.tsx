@@ -16,7 +16,7 @@ const VerifyOtp = ({ verificationData, mobileNumber }: any) => {
   }, [timer]);
 
   const handleVerifyOtp = async () => {
-    window.localStorage.setItem("mobileNumber", mobileNumber);
+    window.localStorage.setItem('mobileNumber', mobileNumber);
     router.push('/profile-create');
   };
 
