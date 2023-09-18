@@ -76,8 +76,12 @@ const Navbar = () => {
                     onClick={() => setOpenMenu(true)}
                   />
                 </MenuButton>
-                <MenuList fontWeight={'400'} textColor={'black'}>
-                  <MenuItem onClick={() => router.push('/dashboard')}>
+                <MenuList fontWeight={"400"} textColor={'black'}>
+                  <MenuItem
+                    onClick={() =>
+                      router.push("/profile")
+                    }
+                  >
                     Profile
                   </MenuItem>
                   <MenuItem onClick={() => Logout()}>Logout</MenuItem>
