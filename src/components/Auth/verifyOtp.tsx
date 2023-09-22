@@ -1,10 +1,11 @@
 import { HStack, PinInput, PinInputField } from '../../../lib/chakraui';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '../../../context/authContext';
 
-const VerifyOtp = ({ verificationData, mobileNumber }: any) => {
+const VerifyOtp = ({ verificationCode, setVerificationCode, mobileNumber }: any) => {
   const [timer, setTimer] = useState<number>(170);
-  const [otpEntered, setOtpEntered] = useState<string>();
+  const {handleOtpVerify} = useAuth()
   const router = useRouter();
 
   useEffect(() => {
@@ -15,10 +16,6 @@ const VerifyOtp = ({ verificationData, mobileNumber }: any) => {
       }, 1000);
   }, [timer]);
 
-  const handleVerifyOtp = async () => {
-    window.localStorage.setItem('mobileNumber', mobileNumber);
-    router.push('/profile-create');
-  };
 
   return (
     <div>
@@ -26,10 +23,10 @@ const VerifyOtp = ({ verificationData, mobileNumber }: any) => {
         OTP Verification
       </h1>
       <p className="text-sm font-light text-[#00184485] mb-4">
-        An OTP has been sent to XXX XXX 8005
+        An OTP has been sent to XXX XXX {mobileNumber.substring(6, 10)}
       </p>
       <HStack marginBottom={'15px'} spacing={'12px'}>
-        <PinInput size={'lg'} onChange={(e: any) => setOtpEntered(e)}>
+        <PinInput size={'lg'} onChange={(e: any) => setVerificationCode(e)}>
           <PinInputField />
           <PinInputField />
           <PinInputField />
@@ -52,8 +49,8 @@ const VerifyOtp = ({ verificationData, mobileNumber }: any) => {
       )}
       <button
         className="btn-secondary w-full"
-        disabled={otpEntered?.length !== 6}
-        onClick={handleVerifyOtp}
+        disabled={verificationCode?.length !== 6}
+        onClick={()=>handleOtpVerify(verificationCode)}
       >
         Verify OTP & Proceed
       </button>
