@@ -4,21 +4,28 @@ import React, { useEffect, useState } from 'react';
 import { Input, Select } from '../../../lib/chakraui';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Header/Navbar.main';
+import IUser from '../../../Interfaces/userInterface';
+import { useAuth } from '../../../context/authContext';
+import createUser from '@/functions/user/createUser';
 
 const CreateProfile = () => {
-  const [userData, setUserData] = useState({
+  const [userData, setUserData] = useState<IUser>({
     name: '',
     role: '',
-    age: '',
-    sex: ''
+    age: 0,
+    sex: '',
+    phoneNumber:'',
+    dateOfBirth: ''
+
   });
   const router = useRouter();
+  const {authUser} = useAuth()
 
   const validateForm = () => {
     if (
       userData.name === '' ||
       userData.role === '' ||
-      userData.age === '' ||
+      userData.age === 0 ||
       userData.sex === ''
     ) {
       return false;
@@ -32,11 +39,16 @@ const CreateProfile = () => {
       name: userData.name,
       age: userData.age,
       sex: userData.sex,
-      role: userData.role
+      role: userData.role,
+      phoneNumber: authUser?.phoneNumber,
+      uid: authUser?.uid
     };
-
-    window.localStorage.setItem('userData', JSON.stringify(data));
-    router.push('/dashboard');
+    await createUser(data);
+    if(userData.role === 'Doctor'){
+      router.push('/profile-create/add-doctor-data');
+    }else{
+      router.push('dashboard?currentTab=E-Clinic')
+    }
   };
 
   return (
@@ -83,8 +95,8 @@ const CreateProfile = () => {
               }
               fontSize="base"
             >
-              <option>Doctor</option>
-              <option>Patient</option>
+              <option value={"Doctor"}>Doctor</option>
+              <option value={"Patient"}>Patient</option>
             </Select>
           </section>
           <section>

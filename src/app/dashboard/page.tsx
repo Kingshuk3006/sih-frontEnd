@@ -14,6 +14,7 @@ const User = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
     const currentTab = searchParams.get('currentTab')
+    
 
     return (
         <div className='bg-blueBackground pb-6'>

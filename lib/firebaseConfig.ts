@@ -2,8 +2,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getAuth } from 'firebase/auth';
-
+import { getAuth } from 'firebase/auth'; 
 const firebaseConfig = {
     apiKey: "AIzaSyAzbY5UTBTRIgd1zjKbWoJHjKbWKElDo2E",
     authDomain: "dermacure-ai.firebaseapp.com",

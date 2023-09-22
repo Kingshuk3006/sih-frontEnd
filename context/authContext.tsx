@@ -68,12 +68,14 @@ export function AuthContextProvider({ children }: any) {
         window.confirmationResult
             .confirm(verificationCode)
             .then(async (res: any) => {
-                console.log(res);
+                const user = res.user;
+                setAuthUser(user);
             })
             .catch((err: any) => {
                 console.log(err);
             });
     }
+
 
     const logout = async () => {
         await signOut(auth);

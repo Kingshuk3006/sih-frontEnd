@@ -50,7 +50,10 @@ const VerifyOtp = ({ verificationCode, setVerificationCode, mobileNumber }: any)
       <button
         className="btn-secondary w-full"
         disabled={verificationCode?.length !== 6}
-        onClick={()=>handleOtpVerify(verificationCode)}
+        onClick={()=>{
+          handleOtpVerify(verificationCode)
+          router.push('/profile-create')
+        }}
       >
         Verify OTP & Proceed
       </button>
