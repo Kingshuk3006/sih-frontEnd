@@ -33,14 +33,13 @@ export function UserContextProvider({ children }: any) {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    
-    let _data = window.localStorage.getItem("userData")
-    let _mobile = window.localStorage.getItem("mobileNumber")
+    let _data = window.localStorage.getItem('userData');
+    let _mobile = window.localStorage.getItem('mobileNumber');
     if (_data && _mobile) {
-      let data = JSON.parse(_data)
-      data.mobileNumber = _mobile
+      let data = JSON.parse(_data);
+      data.mobileNumber = _mobile;
 
-      setUser(data)
+      setUser(data);
     }
   }, []);
 

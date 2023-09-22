@@ -1,5 +1,6 @@
 'use-client';
 
+import Footer from '@/components/Footer/footer.main';
 // import BotsonicWidget from '@/components/Chatbot/Chatbot.main';
 import Navbar from '@/components/Header/Navbar.main';
 import Benefits from '@/components/Homepage/Benefits/benefits.main';
@@ -16,6 +17,7 @@ export default function Home() {
       <Benefits />
       <Testimonial />
       <ContactUs />
+      <Footer />
     </div>
   );
 }
