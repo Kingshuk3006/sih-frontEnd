@@ -1,5 +1,6 @@
 "use client"
 import BotsonicWidget from '@/components/Chatbot/Chatbot.main'
+import BotPage from '@/components/Chatbot/Chatbot.openai'
 import { EClinic } from '@/components/Dashboard/e-clinic.main'
 import Navbar from '@/components/Header/Navbar.main'
 
@@ -14,7 +15,7 @@ const User = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
     const currentTab = searchParams.get('currentTab')
-    
+
 
     return (
         <div className='bg-blueBackground pb-6'>
@@ -36,7 +37,7 @@ const User = () => {
                 </div>
                 <div className='bg-white shadow-lg rounded-md w-full py-4 px-6'>
                     {currentTab === 'E-Clinic' && <EClinic />}
-                    {currentTab === 'ChatBot' && <BotsonicWidget />}
+                    {currentTab === 'ChatBot' && <BotPage/>}
                 </div>
             </div>
         </div>
