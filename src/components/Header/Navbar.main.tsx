@@ -70,12 +70,8 @@ const Navbar = () => {
                     onClick={() => setOpenMenu(true)}
                   />
                 </MenuButton>
-                <MenuList fontWeight={"400"} textColor={'black'}>
-                  <MenuItem
-                    onClick={() =>
-                      router.push("/profile")
-                    }
-                  >
+                <MenuList fontWeight={'400'} textColor={'black'}>
+                  <MenuItem onClick={() => router.push('/profile')}>
                     Profile
                   </MenuItem>
                   <MenuItem

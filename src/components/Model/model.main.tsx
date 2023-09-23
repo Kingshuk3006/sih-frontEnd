@@ -210,7 +210,6 @@ const Model = () => {
     }
   };
 
-
   return (
     <div className="bg-blue-100 min-h-screen flex flex-col items-center justify-center">
       {isloading ? (
@@ -223,7 +222,10 @@ const Model = () => {
             Upload Or Take an Image to Predict Diesease
           </h1>
           <div className="flex justify-around">
-            <button onClick={toggleInput} className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full">
+            <button
+              onClick={toggleInput}
+              className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
+            >
               {useWebcam ? 'Switch to Image' : 'Switch to Webcam'}
             </button>
             {useWebcam ? (
@@ -235,7 +237,10 @@ const Model = () => {
                   height="224"
                   className="mt-4 rounded-xl"
                 ></video>
-                <button onClick={captureImage} className="bg-[#221389] text-white hover:bg-blue-700 p-4 rounded-full">
+                <button
+                  onClick={captureImage}
+                  className="bg-[#221389] text-white hover:bg-blue-700 p-4 rounded-full"
+                >
                   Capture
                 </button>
               </div>
@@ -249,11 +254,13 @@ const Model = () => {
                   className="hidden"
                   id="fileInput"
                 />
-                <label htmlFor="fileInput" className="bg-[#221389] text-white hover:bg-blue-700 p-4 rounded-full text-center">
+                <label
+                  htmlFor="fileInput"
+                  className="bg-[#221389] text-white hover:bg-blue-700 p-4 rounded-full text-center"
+                >
                   Upload Image
                 </label>
                 {image && (
-
                   <img
                     src={image}
                     alt="Captured"
@@ -268,7 +275,10 @@ const Model = () => {
 
           {image && (
             <div className="flex flex-col items-center py-4">
-              <button onClick={startPrediction} className="bg-[#15B9FF] text-white hover:bg-blue-700 w-44 h-12 rounded-full">
+              <button
+                onClick={startPrediction}
+                className="bg-[#15B9FF] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
+              >
                 Start Predicting
               </button>
               {isloadingDiesease ? (
@@ -283,14 +293,18 @@ const Model = () => {
                       <p className="text-blue-800 text-xl">
                         {Class[diesease as number]}
                       </p>
-                      <button onClick={downloadPDF} className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full">Download Report</button>
+                      <button
+                        onClick={downloadPDF}
+                        className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
+                      >
+                        Download Report
+                      </button>
                     </div>
                   )}
                 </>
               )}
             </div>
           )}
-
 
           <canvas
             ref={canvasRef}

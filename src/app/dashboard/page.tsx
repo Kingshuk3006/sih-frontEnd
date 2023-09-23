@@ -1,21 +1,26 @@
+
 "use client"
 import BotsonicWidget from '@/components/Chatbot/Chatbot.main'
 import BotPage from '@/components/Chatbot/Chatbot.openai'
 import { EClinic } from '@/components/Dashboard/e-clinic.main'
 import Navbar from '@/components/Header/Navbar.main'
 
-import { useSearchParams } from 'next/navigation'
-import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
-import { AiFillThunderbolt, AiOutlineThunderbolt, AiOutlineUser } from 'react-icons/ai'
-import { BsRobot } from 'react-icons/bs'
-import { FaUser } from 'react-icons/fa'
+
+import { useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import {
+  AiFillThunderbolt,
+  AiOutlineThunderbolt,
+  AiOutlineUser
+} from 'react-icons/ai';
+import { BsRobot } from 'react-icons/bs';
+import { FaUser } from 'react-icons/fa';
 
 const User = () => {
-    const searchParams = useSearchParams()
-    const router = useRouter()
-    const currentTab = searchParams.get('currentTab')
-
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const currentTab = searchParams.get('currentTab');
 
     return (
         <div className='bg-blueBackground pb-6'>
@@ -40,8 +45,15 @@ const User = () => {
                     {currentTab === 'ChatBot' && <BotPage/>}
                 </div>
             </div>
-        </div>
-    )
-}
 
-export default User
+        </div>
+        <div className="bg-white shadow-lg rounded-md w-full py-4 px-6">
+          {currentTab === 'E-Clinic' && <EClinic />}
+          {currentTab === 'ChatBot' && <BotsonicWidget />}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default User;
