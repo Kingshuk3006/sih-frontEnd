@@ -1,19 +1,14 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable @next/next/no-img-element */
-'use client';
-
+'use client'
 import Navbar from '@/components/Header/Navbar.main';
 import React, { useEffect, useState } from 'react';
 import EnterMobileNumber from '@/components/Auth/mobileNumber';
 import VerifyOtp from '@/components/Auth/verifyOtp';
+import { signInWithPhoneNumber, RecaptchaVerifier , getAuth} from "@firebase/auth";
 
 const Login = () => {
   const [isOtpPage, setIsOtpPage] = useState<boolean>(false);
-  const [verificationData, setVerificationData] = useState({
-    VerificationResponse: '',
-    ServiceResponseParam: ''
-  });
   const [mobileNumber, setMobileNumber] = useState<string>();
+  const [verificationCode, setVerificationCode] = useState('');
 
   return (
     <div className="min-h-screen bg-[#76D6FF]">
@@ -27,17 +22,19 @@ const Login = () => {
           />
           {isOtpPage ? (
             <VerifyOtp
-              verificationData={verificationData}
               mobileNumber={mobileNumber}
+              verificationCode={verificationCode}
+              setVerificationCode={setVerificationCode}
             />
           ) : (
             <EnterMobileNumber
               setIsOtpPage={setIsOtpPage}
               mobileNumber={mobileNumber}
               setMobileNumber={setMobileNumber}
-              setVerificationData={setVerificationData}
+
             />
           )}
+          <div id='recaptcha-container'></div>
         </div>
       </div>
     </div>

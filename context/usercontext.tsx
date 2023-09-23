@@ -10,15 +10,19 @@ import {
 
 import React, { useContext } from 'react';
 import { CircularProgress } from '@chakra-ui/react';
+import { useAuth } from './authContext';
+import IUser from '../Interfaces/userInterface';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebaseConfig';
 
 interface IDefaultValues {
-  user: null | any;
+  user: null | IUser;
   setUser: Dispatch<SetStateAction<any | null>>;
 }
 
 const defaultValues: IDefaultValues = {
   user: null,
-  setUser: () => {}
+  setUser: () => { }
 };
 
 const userContext = React.createContext(defaultValues);
@@ -28,9 +32,35 @@ export function useUser() {
 }
 
 export function UserContextProvider({ children }: any) {
-  const [user, setUser] = useState<any | null>(defaultValues.user);
-
+  const [user, setUser] = useState<IUser | null>(defaultValues.user);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { authUser } = useAuth();
+  const [loader, setLoader] = useState(false);
+
+
+  const getUserData = useCallback(async () => {
+    setLoader(true);
+    try {
+      if (authUser) {
+        const uid = authUser.uid;
+        onSnapshot(doc(db, 'users', uid), async (doc) => {
+          if (doc.data() !== undefined) {
+            let userData = { ...doc.data(), uid: doc.id };
+            setUser(userData as IUser);
+          }
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    setLoader(false);
+  }, [authUser]);
+
+
+   useEffect(() => {
+    getUserData();
+  }, [authUser, getUserData]);
 
   useEffect(() => {
     let _data = window.localStorage.getItem('userData');

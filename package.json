@@ -27,6 +27,7 @@
     "encoding": "^0.1.13",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "firebase": "^10.4.0",
     "formik": "^2.4.4",
     "framer-motion": "^10.16.4",
     "next": "13.4.19",

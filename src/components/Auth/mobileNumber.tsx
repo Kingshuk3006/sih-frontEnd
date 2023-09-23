@@ -1,14 +1,17 @@
 import { InputGroup, InputLeftAddon, Input } from '../../../lib/chakraui';
 import React, { useState } from 'react';
 import { BsTelephone } from 'react-icons/bs';
+import { useAuth } from '../../../context/authContext';
 // import { sendOtp } from "@/functions/auth/sendOtp";
 
 const EnterMobileNumber = ({
   setIsOtpPage,
-  setVerificationData,
   mobileNumber,
-  setMobileNumber
+  setMobileNumber,
+
 }: any) => {
+
+  const {loginWithPhoneNumber} = useAuth()
   return (
     <div className="space-y-4">
       <h1 className="text-2xl text-blueDeep font-semibold mb-2 ">
@@ -34,7 +37,10 @@ const EnterMobileNumber = ({
       <button
         className=" btn-secondary w-full"
         disabled={mobileNumber?.length != 10}
-        onClick={() => setIsOtpPage(true)}
+        onClick={() => {
+          setIsOtpPage(true)
+          loginWithPhoneNumber(mobileNumber)
+        }}
       >
         Get Otp
       </button>

@@ -12,12 +12,14 @@ import {
   MenuItem,
   MenuList
 } from '../../../lib/chakraui';
+import { useAuth } from '../../../context/authContext';
 
 const Navbar = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const router = useRouter();
   const { user } = useUser();
+  const { logout } = useAuth()
 
   const toggleMenu = () => {
     setOpen(!open);
@@ -30,17 +32,10 @@ const Navbar = () => {
     { href: '/#contact', text: 'Contact Us' }
   ];
 
-  const Logout = () => {
-    window.localStorage.removeItem('userData');
-    window.localStorage.removeItem('mobileNumber');
-    router.push('/auth/login');
-  };
-
   return (
     <div
-      className={`sticky top-0 z-50 px-4 py-4 w-screen justify-between items-center flex ${
-        open ? 'flex-col' : 'flex-row'
-      } text-white font-semibold bg-[#221389] shadow-lg`}
+      className={`sticky top-0 z-50 px-4 py-4 w-screen justify-between items-center flex ${open ? 'flex-col' : 'flex-row'
+        } text-white font-semibold bg-[#221389] shadow-lg`}
     >
       <div className="flex justify-between items-center w-full">
         <div className="flex justify-between items-center gap-4">
@@ -53,9 +48,8 @@ const Navbar = () => {
         </div>
 
         <div
-          className={`hidden md:flex md:items-center md:gap-3 ${
-            open ? 'hidden' : ''
-          }`}
+          className={`hidden md:flex md:items-center md:gap-3 ${open ? 'hidden' : ''
+            }`}
         >
           {menuItems.map((item, index) => (
             <ul
@@ -80,7 +74,14 @@ const Navbar = () => {
                   <MenuItem onClick={() => router.push('/profile')}>
                     Profile
                   </MenuItem>
-                  <MenuItem onClick={() => Logout()}>Logout</MenuItem>
+                  <MenuItem
+                    onClick={() =>
+                      router.push("/dashboard?currentTab=E-Clinic")
+                    }
+                  >
+                    Dashboard
+                  </MenuItem>
+                  <MenuItem onClick={() => logout()}>Logout</MenuItem>
                 </MenuList>
               </Menu>
             ) : (
@@ -99,9 +100,8 @@ const Navbar = () => {
       </div>
 
       <div
-        className={`${
-          open ? 'block' : 'hidden'
-        } w-full py-4 md:hidden flex flex-col items-center gap-4`}
+        className={`${open ? 'block' : 'hidden'
+          } w-full py-4 md:hidden flex flex-col items-center gap-4`}
       >
         {menuItems.map((item, index) => (
           <ul
