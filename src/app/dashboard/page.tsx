@@ -52,8 +52,9 @@ const User = () => {
           </div>
           <div className="bg-white shadow-lg rounded-md w-full py-4 px-6">
             {currentTab === 'E-Clinic' && <EClinic />}
-            {currentTab === 'ChatBot' && <BotsonicWidget />}
-            {currentTab === 'ChatRoom' && <ChatRoom />}
+            {/* {currentTab === 'ChatBot' && <BotsonicWidget />} */}
+            {/* {currentTab === 'ChatRoom' && <ChatRoom />} */}
+            {currentTab === 'ChatBot' && <BotPage />}
           </div>
         </div>
       </div>
