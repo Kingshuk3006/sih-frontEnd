@@ -22,7 +22,7 @@ interface IDefaultValues {
 
 const defaultValues: IDefaultValues = {
   user: null,
-  setUser: () => { }
+  setUser: () => {}
 };
 
 const userContext = React.createContext(defaultValues);
@@ -38,13 +38,12 @@ export function UserContextProvider({ children }: any) {
   const { authUser } = useAuth();
   const [loader, setLoader] = useState(false);
 
-
   const getUserData = useCallback(async () => {
     setLoader(true);
     try {
       if (authUser) {
         const uid = authUser.uid;
-        onSnapshot(doc(db, 'users', uid), async (doc) => {
+        onSnapshot(doc(db, 'users', uid), async doc => {
           if (doc.data() !== undefined) {
             let userData = { ...doc.data(), uid: doc.id };
             setUser(userData as IUser);
@@ -57,8 +56,7 @@ export function UserContextProvider({ children }: any) {
     setLoader(false);
   }, [authUser]);
 
-
-   useEffect(() => {
+  useEffect(() => {
     getUserData();
   }, [authUser, getUserData]);
 

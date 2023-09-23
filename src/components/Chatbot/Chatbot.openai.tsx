@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
 import React from 'react';
 import { sendToOpenAI } from '../../utils/sendToOpenAi';
 
 export default function BotPage() {
   const [response, setResponse] = React.useState('');
-  const [request, setRequest] =React.useState('')
+  const [request, setRequest] = React.useState('');
   const [error, setError] = React.useState('');
 
   const handleMessage = async () => {
@@ -22,7 +22,7 @@ export default function BotPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h1 className="text-2xl font-semibold mb-4">OpenAI Response:</h1>
-      
+
       {response && (
         <div className="bg-green-200 p-4 rounded-lg text-green-800 mb-4">
           {response}
@@ -35,10 +35,12 @@ export default function BotPage() {
         </div>
       )}
       <input
-      value={request}
-        className='input-primary'
-      placeholder='Hello How can I help You today ?'
-      onChange={(e)=>{setRequest(e.target.value)}}
+        value={request}
+        className="input-primary"
+        placeholder="Hello How can I help You today ?"
+        onChange={e => {
+          setRequest(e.target.value);
+        }}
       />
 
       <button

@@ -3,9 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../context/authContext';
 
-const VerifyOtp = ({ verificationCode, setVerificationCode, mobileNumber }: any) => {
+const VerifyOtp = ({
+  verificationCode,
+  setVerificationCode,
+  mobileNumber
+}: any) => {
   const [timer, setTimer] = useState<number>(170);
-  const {handleOtpVerify} = useAuth()
+  const { handleOtpVerify } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
@@ -15,7 +19,6 @@ const VerifyOtp = ({ verificationCode, setVerificationCode, mobileNumber }: any)
         setTimer(timer - 1);
       }, 1000);
   }, [timer]);
-
 
   return (
     <div>
@@ -50,9 +53,9 @@ const VerifyOtp = ({ verificationCode, setVerificationCode, mobileNumber }: any)
       <button
         className="btn-secondary w-full"
         disabled={verificationCode?.length !== 6}
-        onClick={()=>{
-          handleOtpVerify(verificationCode)
-          router.push('/profile-create')
+        onClick={() => {
+          handleOtpVerify(verificationCode);
+          router.push('/profile-create');
         }}
       >
         Verify OTP & Proceed

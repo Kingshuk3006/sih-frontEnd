@@ -6,7 +6,12 @@ import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Header/Navbar.main';
 import IUser from '../../../../Interfaces/userInterface';
 import medicalSpecialties from '../../../../data/medialSpeciality';
-import { getDownloadURL, ref, uploadBytesResumable, uploadString } from 'firebase/storage';
+import {
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+  uploadString
+} from 'firebase/storage';
 import { storage } from '../../../../lib/firebaseConfig';
 import { useAuth } from '../../../../context/authContext';
 import updateUserData from '@/functions/user/updateUserData';
@@ -14,13 +19,12 @@ const CreateDoctorProfile = () => {
   const [docData, setDocData] = useState<Partial<IUser>>({
     docSignature: '',
     docLicense: '',
-    docSpeciality: '',
-
+    docSpeciality: ''
   });
 
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const router = useRouter();
-  const { authUser } = useAuth()
+  const { authUser } = useAuth();
 
   const validateForm = () => {
     if (
@@ -40,14 +44,12 @@ const CreateDoctorProfile = () => {
 
     const data = {
       docLicense: docData.docLicense as string,
-      docSignature: "uploadedImageUrl" as string,
-      docSpeciality: docData.docSpeciality as string,
+      docSignature: 'uploadedImageUrl' as string,
+      docSpeciality: docData.docSpeciality as string
     };
     await updateUserData(authUser?.uid, data);
     router.push('/dashboard?currentTab=E-Clinic');
   };
-
-
 
   const addImagetoPost = (e: any) => {
     const reader = new FileReader();
@@ -67,48 +69,45 @@ const CreateDoctorProfile = () => {
       `signature${date.getTime()}${authUser?.uid}`
     );
 
-
     const uploadTask =
       selectedFile && uploadBytesResumable(signatureRef, selectedFile);
     uploadTask &&
       uploadTask.on(
-        "state_changed",
+        'state_changed',
         (snapshot: any) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100 as number;
+          const progress = ((snapshot.bytesTransferred / snapshot.totalBytes) *
+            100) as number;
           console.log(progress);
           switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
+            case 'paused':
+              console.log('Upload is paused');
               break;
-            case "running":
-              console.log("Upload is running");
+            case 'running':
+              console.log('Upload is running');
               break;
           }
         },
         (error: any) => {
           switch (error.code) {
-            case "storage/unauthorized":
+            case 'storage/unauthorized':
               break;
-            case "storage/canceled":
+            case 'storage/canceled':
               break;
 
-            case "storage/unknown":
+            case 'storage/unknown':
               break;
           }
         },
         async () => {
           await getDownloadURL(uploadTask.snapshot.ref).then(
-            async (downloadURLOnUpload) => {
-              console.log(downloadURLOnUpload)
+            async downloadURLOnUpload => {
+              console.log(downloadURLOnUpload);
               return downloadURLOnUpload;
             }
-
           );
         }
       );
-  }
-
+  };
 
   return (
     <div className="min-h-screen bg-blueBackground">
@@ -154,37 +153,44 @@ const CreateDoctorProfile = () => {
               }
               fontSize="base"
             >
-              {
-                medicalSpecialties.map((specialties, i) => {
-                  return (
-                    <option key={i} value={specialties}>{specialties}</option>
-                  )
-                })
-
-              }
+              {medicalSpecialties.map((specialties, i) => {
+                return (
+                  <option key={i} value={specialties}>
+                    {specialties}
+                  </option>
+                );
+              })}
             </Select>
           </section>
           <section>
             <h2 className="font-medium mb-1">Signature</h2>
-            <p className='text-sm mb-2 font-extralight'>Your signature will only be used to prepare medical reports and validation</p>
-            {
-              selectedFile ? <img src={selectedFile} className='h-[10rem] w-full object-contain' alt='image of signature' onClick={() => setSelectedFile(null)} /> : <Input
+            <p className="text-sm mb-2 font-extralight">
+              Your signature will only be used to prepare medical reports and
+              validation
+            </p>
+            {selectedFile ? (
+              <img
+                src={selectedFile}
+                className="h-[10rem] w-full object-contain"
+                alt="image of signature"
+                onClick={() => setSelectedFile(null)}
+              />
+            ) : (
+              <Input
                 type="file"
                 backgroundColor={'#FBFAFF'}
                 focusBorderColor="#1A75FF"
-                onChange={(e) => {
-                  addImagetoPost(e)
-
-                }
-                }
+                onChange={e => {
+                  addImagetoPost(e);
+                }}
               />
-            }
+            )}
           </section>
 
           <button
             className="btn-secondary w-full rounded-md"
             // disabled={!validateForm()}
-          onClick={handleUpdateDocData}
+            onClick={handleUpdateDocData}
           >
             Submit & Proceed
           </button>

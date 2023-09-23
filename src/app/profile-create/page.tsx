@@ -14,12 +14,11 @@ const CreateProfile = () => {
     role: '',
     age: 0,
     sex: '',
-    phoneNumber:'',
+    phoneNumber: '',
     dateOfBirth: ''
-
   });
   const router = useRouter();
-  const {authUser} = useAuth()
+  const { authUser } = useAuth();
 
   const validateForm = () => {
     if (
@@ -44,10 +43,10 @@ const CreateProfile = () => {
       uid: authUser?.uid
     };
     await createUser(data);
-    if(userData.role === 'Doctor'){
+    if (userData.role === 'Doctor') {
       router.push('/profile-create/add-doctor-data');
-    }else{
-      router.push('dashboard?currentTab=E-Clinic')
+    } else {
+      router.push('dashboard?currentTab=E-Clinic');
     }
   };
 
@@ -95,8 +94,8 @@ const CreateProfile = () => {
               }
               fontSize="base"
             >
-              <option value={"Doctor"}>Doctor</option>
-              <option value={"Patient"}>Patient</option>
+              <option value={'Doctor'}>Doctor</option>
+              <option value={'Patient'}>Patient</option>
             </Select>
           </section>
           <section>
