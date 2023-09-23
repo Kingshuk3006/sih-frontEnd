@@ -19,7 +19,7 @@ const Navbar = () => {
   const [openMenu, setOpenMenu] = useState<boolean>(false);
   const router = useRouter();
   const { user } = useUser();
-  const { logout } = useAuth()
+  const { logout } = useAuth();
 
   const toggleMenu = () => {
     setOpen(!open);
@@ -34,8 +34,9 @@ const Navbar = () => {
 
   return (
     <div
-      className={`sticky top-0 z-50 px-4 py-4 w-screen justify-between items-center flex ${open ? 'flex-col' : 'flex-row'
-        } text-white font-semibold bg-[#221389] shadow-lg`}
+      className={`sticky top-0 z-50 px-4 py-4 w-screen justify-between items-center flex ${
+        open ? 'flex-col' : 'flex-row'
+      } text-white font-semibold bg-[#221389] shadow-lg`}
     >
       <div className="flex justify-between items-center w-full">
         <div className="flex justify-between items-center gap-4">
@@ -48,8 +49,9 @@ const Navbar = () => {
         </div>
 
         <div
-          className={`hidden md:flex md:items-center md:gap-3 ${open ? 'hidden' : ''
-            }`}
+          className={`hidden md:flex md:items-center md:gap-3 ${
+            open ? 'hidden' : ''
+          }`}
         >
           {menuItems.map((item, index) => (
             <ul
@@ -76,7 +78,7 @@ const Navbar = () => {
                   </MenuItem>
                   <MenuItem
                     onClick={() =>
-                      router.push("/dashboard?currentTab=E-Clinic")
+                      router.push('/dashboard?currentTab=E-Clinic')
                     }
                   >
                     Dashboard
@@ -100,8 +102,9 @@ const Navbar = () => {
       </div>
 
       <div
-        className={`${open ? 'block' : 'hidden'
-          } w-full py-4 md:hidden flex flex-col items-center gap-4`}
+        className={`${
+          open ? 'block' : 'hidden'
+        } w-full py-4 md:hidden flex flex-col items-center gap-4`}
       >
         {menuItems.map((item, index) => (
           <ul

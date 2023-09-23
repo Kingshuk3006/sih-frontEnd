@@ -5,14 +5,27 @@ import { loadModel } from '../../utils/loadmodel';
 import { NextPage } from 'next';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs';
-import { Class } from '../../database/diesease';
+import { Class, Summary } from '../../database/diesease';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { useUser } from '../../../context/usercontext';
+import {
+  load as cocoModelLoad,
+  ObjectDetection
+} from '@tensorflow-models/coco-ssd';
+import { ClassNames } from '@emotion/react';
+
+interface DetectedObject {
+  bbox: [number, number, number, number];
+  class: string;
+  score: number;
+}
 
 const Model = () => {
+  const reference = useRef<any>(null);
   const [model, setModel] = useState<tf.LayersModel | null>(null);
   const [image, setImage] = useState<string | null>(null);
   const [prediction, setPrediction] = useState<string | null>(null);
+  const [score, setScore] = useState<number | null>(null);
   const [useWebcam, setUseWebcam] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -22,6 +35,111 @@ const Model = () => {
   const [pdfGenerated, setPdfGenerated] = useState(false);
   const [pdfBlob, setPdfBlob] = useState<any>(null);
   const { user } = useUser();
+
+  //OBJECT DETECTION //
+  const canvasEle = useRef<HTMLCanvasElement | null>(null);
+  const imageEle = useRef<HTMLImageElement | null>(null);
+  const [objectDetector, setObjectDetector] = useState<ObjectDetection | null>(
+    null
+  );
+  const [detectedObjects, setDetectedObjects] = useState<DetectedObject[]>([]);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const draw = (ctx: CanvasRenderingContext2D, objects: DetectedObject[]) => {
+    if (canvasEle.current && imageEle.current) {
+      canvasEle.current.width = imageEle.current.width;
+      canvasEle.current.height = imageEle.current.height;
+
+      // Clear part of the canvas
+      ctx.fillStyle = '#000000';
+      ctx.fillRect(0, 0, imageEle.current.width, imageEle.current.height);
+
+      ctx.drawImage(
+        imageEle.current,
+        0,
+        0,
+        imageEle.current.width,
+        imageEle.current.height
+      );
+
+      for (let i = 0; i < objects.length; i += 1) {
+        // Draw the background rectangle
+        ctx.fillStyle = 'rgba(0, 128, 0, 0.5)';
+        ctx.strokeStyle = 'white';
+        ctx.fillRect(
+          objects[i].bbox[0],
+          objects[i].bbox[1],
+          objects[i].bbox[2],
+          20
+        );
+
+        ctx.font = '16px Arial';
+        ctx.fillStyle = 'white';
+        ctx.fillText(
+          Class[diesease as number],
+          //objects[i].class,
+          objects[i].bbox[0] + 4,
+          objects[i].bbox[1] + 16
+        );
+
+        ctx.beginPath();
+        ctx.rect(
+          objects[i].bbox[0],
+          objects[i].bbox[1],
+          objects[i].bbox[2],
+          objects[i].bbox[3]
+        );
+        ctx.strokeStyle = 'green';
+        ctx.stroke();
+        ctx.closePath();
+      }
+    }
+  };
+
+  const startDetecting = async () => {
+    if (!objectDetector || !imageEle.current) return;
+
+    const image = tf.browser.fromPixels(imageEle.current);
+    const predictions = await objectDetector.detect(image);
+
+    setDetectedObjects(predictions);
+    if (predictions && canvasEle.current) {
+      draw(
+        canvasEle.current.getContext('2d') as CanvasRenderingContext2D,
+        predictions
+      );
+    }
+  };
+
+  const loadObjectDetectionModel = async () => {
+    try {
+      const model = await cocoModelLoad();
+      setObjectDetector(model);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    loadObjectDetectionModel();
+  }, []);
+
+  const setImageCleaned = (event: any) => {
+    if (event.target.files && event.target.files[0]) {
+      const image = event.target.files[0];
+      if (canvasEle.current) {
+        const canvas = canvasEle.current.getContext('2d');
+        if (canvas) {
+          canvas.clearRect(0, 0, canvas.canvas.width, canvas.canvas.height);
+        }
+      }
+      setUploadedImage(URL.createObjectURL(image));
+    }
+  };
+
+  //OBJECT DETECTION //
 
   const generatePDF = async (dis: string) => {
     try {
@@ -43,9 +161,9 @@ const Model = () => {
       // Patient information
       const fontSize = 16;
       const padding = 20;
-      const patientName = `Patient: ${user.name}`;
-      const age = `Age: ${user.age}`;
-      const sex = `Sex: ${user.sex}`;
+      const patientName = `Patient: ${user?.name}`;
+      const age = `Age: ${user?.age}`;
+      const sex = `Sex: ${user?.sex}`;
       const disease = `Disease: ${dis}`;
 
       page.drawText(patientName, {
@@ -130,6 +248,7 @@ const Model = () => {
       const imageUrl = URL.createObjectURL(file);
       setImage(imageUrl);
       setUseWebcam(false); // Switch back to image input mode
+      setImageCleaned(event);
 
       // Load and preprocess the image
       //startPrediction();
@@ -137,7 +256,7 @@ const Model = () => {
   };
 
   // Function to handle capturing an image from webcam
-  const captureImage = () => {
+  const captureImage = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
@@ -148,7 +267,7 @@ const Model = () => {
         const capturedImage = canvas.toDataURL('image/jpeg');
         setImage(capturedImage);
         setUseWebcam(false); // Switch back to image input mode
-
+        setUploadedImage(capturedImage);
         // Load and preprocess the captured image
         //startPrediction();
       }
@@ -188,7 +307,7 @@ const Model = () => {
     setIsloadingDiesease(true);
     if (model && image) {
       const img = new Image();
-      img.src = image;
+      img.src = uploadedImage as string;
       img.onload = async () => {
         const tensor = tf.browser.fromPixels(img);
         const resized2 = tf.image.resizeBilinear(tensor, [28, 28]);
@@ -203,12 +322,16 @@ const Model = () => {
         const topClass = predictionData.indexOf(Math.max(...predictionData));
 
         setPrediction(`Class ${topClass}`);
+        setScore(predictionData[topClass]);
         setDiesease(topClass);
         setIsloadingDiesease(false);
         generatePDF(Class[diesease as number]);
       };
     }
   };
+  useEffect(() => {}, [startDetecting, startPrediction]);
+
+  //detection draw
 
   return (
     <div className="bg-blue-100 min-h-screen flex flex-col items-center justify-center">
@@ -221,7 +344,7 @@ const Model = () => {
           <h1 className="lg:text-3xl font-bold my-4 text-center">
             Upload Or Take an Image to Predict Diesease
           </h1>
-          <div className="flex justify-around">
+          <div className="flex justify-around items-end">
             <button
               onClick={toggleInput}
               className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
@@ -235,40 +358,33 @@ const Model = () => {
                   autoPlay
                   width="224"
                   height="224"
-                  className="mt-4 rounded-xl"
+                  className="mt-4 rounded-xl h-full w-full"
                 ></video>
                 <button
-                  onClick={captureImage}
+                  onClick={e => captureImage(e)}
                   className="bg-[#221389] text-white hover:bg-blue-700 p-4 rounded-full"
                 >
                   Capture
                 </button>
               </div>
             ) : (
-              <div className="flex flex-col justify-between">
+              <div>
                 {/* Add your image upload input here */}
                 <input
                   type="file"
+                  hidden
+                  ref={reference}
                   accept="image/*"
                   onChange={handleImageUpload}
                   className="hidden"
                   id="fileInput"
                 />
-                <label
-                  htmlFor="fileInput"
-                  className="bg-[#221389] text-white hover:bg-blue-700 p-4 rounded-full text-center"
+                <button
+                  className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
+                  onClick={() => reference.current?.click()}
                 >
                   Upload Image
-                </label>
-                {image && (
-                  <img
-                    src={image}
-                    alt="Captured"
-                    width="224"
-                    height="224"
-                    className="mt-4 rounded-lg"
-                  />
-                )}
+                </button>
               </div>
             )}
           </div>
@@ -276,42 +392,69 @@ const Model = () => {
           {image && (
             <div className="flex flex-col items-center py-4">
               <button
-                onClick={startPrediction}
+                onClick={() => {
+                  startPrediction();
+                  startDetecting();
+                }}
                 className="bg-[#15B9FF] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
               >
                 Start Predicting
               </button>
-              {isloadingDiesease ? (
-                <h1 className="lg:text-2xl text-center font-bold text-blue-800 mt-4">
-                  Loading...
-                </h1>
-              ) : (
-                <>
-                  {prediction !== null && (
-                    <div className="mt-4 flex items-center gap-4">
-                      <h2 className="text-xl font-bold">Model Prediction:</h2>
-                      <p className="text-blue-800 text-xl">
-                        {Class[diesease as number]}
-                      </p>
-                      <button
-                        onClick={downloadPDF}
-                        className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
-                      >
-                        Download Report
-                      </button>
-                    </div>
-                  )}
-                </>
-              )}
             </div>
           )}
 
           <canvas
             ref={canvasRef}
             style={{ display: 'none' }}
-            width="224"
-            height="200"
+            width="300"
+            height="300"
           />
+          <div className="flex justify-evenly">
+            {uploadedImage && (
+              <>
+                <img
+                  ref={imageEle}
+                  src={uploadedImage}
+                  alt="sample image"
+                  width={300}
+                  height={300}
+                  className="rounded-xl"
+                  //layout="responsive"
+                  //objectFit="cover"
+                />
+                <canvas
+                  ref={canvasEle}
+                  width={300}
+                  height={300}
+                  className="rounded"
+                />
+              </>
+            )}
+          </div>
+          {isloadingDiesease ? (
+            <h1 className="lg:text-2xl text-center font-bold text-blue-800 mt-4">
+              Loading...
+            </h1>
+          ) : (
+            <>
+              {prediction !== null && (
+                <div className="mt-4 flex items-center justify-center py-12 gap-4">
+                  <h2 className="text-xl font-bold">Model Prediction:</h2>
+                  <p className="text-blue-800 text-xl">
+                    {Class[diesease as number]}{' '}
+                    {Math.abs((score as number) * 100).toFixed(2)}%
+                    <h1>{Summary[diesease as number]}</h1>
+                  </p>
+                  <button
+                    onClick={downloadPDF}
+                    className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
+                  >
+                    Download Report
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       )}
     </div>

@@ -7,11 +7,9 @@ import { useAuth } from '../../../context/authContext';
 const EnterMobileNumber = ({
   setIsOtpPage,
   mobileNumber,
-  setMobileNumber,
-
+  setMobileNumber
 }: any) => {
-
-  const {loginWithPhoneNumber} = useAuth()
+  const { loginWithPhoneNumber } = useAuth();
   return (
     <div className="space-y-4">
       <h1 className="text-2xl text-blueDeep font-semibold mb-2 ">
@@ -38,8 +36,8 @@ const EnterMobileNumber = ({
         className=" btn-secondary w-full"
         disabled={mobileNumber?.length != 10}
         onClick={() => {
-          setIsOtpPage(true)
-          loginWithPhoneNumber(mobileNumber)
+          setIsOtpPage(true);
+          loginWithPhoneNumber(mobileNumber);
         }}
       >
         Get Otp

@@ -2,15 +2,15 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getAuth } from 'firebase/auth'; 
+import { getAuth } from 'firebase/auth';
 const firebaseConfig = {
-    apiKey: "AIzaSyAzbY5UTBTRIgd1zjKbWoJHjKbWKElDo2E",
-    authDomain: "dermacure-ai.firebaseapp.com",
-    projectId: "dermacure-ai",
-    storageBucket: "dermacure-ai.appspot.com",
-    messagingSenderId: "731769293567",
-    appId: "1:731769293567:web:c6a0a41f39f635179e9aca",
-    measurementId: "G-VE44JEJX7W"
+  apiKey: 'AIzaSyAzbY5UTBTRIgd1zjKbWoJHjKbWKElDo2E',
+  authDomain: 'dermacure-ai.firebaseapp.com',
+  projectId: 'dermacure-ai',
+  storageBucket: 'dermacure-ai.appspot.com',
+  messagingSenderId: '731769293567',
+  appId: '1:731769293567:web:c6a0a41f39f635179e9aca',
+  measurementId: 'G-VE44JEJX7W'
 };
 
 // Initialize Firebase

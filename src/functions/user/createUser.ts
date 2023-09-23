@@ -9,8 +9,8 @@ const createUser = async (user: any) => {
       uid: user.uid,
       name: user.name,
       age: user.age,
-      sex:user.sex,
-      role:user.role,
+      sex: user.sex,
+      role: user.role,
       phoneNumber: user.phoneNumber
     });
   } else {

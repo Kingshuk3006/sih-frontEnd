@@ -1,9 +1,13 @@
-'use client'
+'use client';
 import Navbar from '@/components/Header/Navbar.main';
 import React, { useEffect, useState } from 'react';
 import EnterMobileNumber from '@/components/Auth/mobileNumber';
 import VerifyOtp from '@/components/Auth/verifyOtp';
-import { signInWithPhoneNumber, RecaptchaVerifier , getAuth} from "@firebase/auth";
+import {
+  signInWithPhoneNumber,
+  RecaptchaVerifier,
+  getAuth
+} from '@firebase/auth';
 
 const Login = () => {
   const [isOtpPage, setIsOtpPage] = useState<boolean>(false);
@@ -31,10 +35,9 @@ const Login = () => {
               setIsOtpPage={setIsOtpPage}
               mobileNumber={mobileNumber}
               setMobileNumber={setMobileNumber}
-
             />
           )}
-          <div id='recaptcha-container'></div>
+          <div id="recaptcha-container"></div>
         </div>
       </div>
     </div>

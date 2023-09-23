@@ -1,6 +1,6 @@
-import { doc, updateDoc } from "firebase/firestore";
-import IUser from "../../../Interfaces/userInterface";
-import { db } from "../../../lib/firebaseConfig";
+import { doc, updateDoc } from 'firebase/firestore';
+import IUser from '../../../Interfaces/userInterface';
+import { db } from '../../../lib/firebaseConfig';
 
 export default async function updateUserData(
   userid: string | undefined,
