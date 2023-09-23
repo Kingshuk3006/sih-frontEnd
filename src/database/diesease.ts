@@ -1,11 +1,11 @@
 export const Class: string[] = [
-  'Actinic keratoses',
-  'basal cell carcinoma',
-  'benign keratosis',
-  'dermatofibroma',
-  'melanocytic nevi',
-  'pyogenic granulomas',
-  'melanoma',
+  'Actinic Keratoses',
+  'Basal Cell Carcinoma',
+  'Benign Keratosis',
+  'Dermatofibroma',
+  'Melanocytic Nevi',
+  'Pyogenic Granulomas',
+  'Melanoma',
   'Normal'
 ];
 

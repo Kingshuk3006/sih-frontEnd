@@ -442,7 +442,7 @@ const Model = () => {
                   <h2 className="text-xl font-bold">Model Prediction:</h2>
                   <p className="text-blue-800 text-xl">
                     {Class[diesease as number]}{' '}
-                    {Math.abs((score as number) * 100).toFixed(2)}%
+                    {/* {Math.abs((score as number) * 100).toFixed(2)}% */}
                     <h1>{Summary[diesease as number]}</h1>
                   </p>
                   <button

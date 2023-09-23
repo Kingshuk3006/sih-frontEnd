@@ -6,7 +6,7 @@ interface OpenAIResponse {
 
 export async function sendToOpenAI(message: string): Promise<string> {
   // Replace 'YOUR_OPENAI_API_KEY' with your actual OpenAI API key
-  const apiKey = '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';
+  const apiKey = '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';
 
   const openaiResponse = await fetch(
     'https://api.openai.com/v1/chat/completions',
@@ -22,7 +22,7 @@ export async function sendToOpenAI(message: string): Promise<string> {
           {
             role: 'system',
             content:
-              'You are a helpful assistant for a platform which treats dermatological diseases.'
+              'You are a helpful assistant for a platform which treats dermatological diseases.After knowing 4 symptoms, you have to suggest the patient to visit E-Clinic and Upload the image of their skin where the issue is present '
           },
           { role: 'user', content: message }
         ]
