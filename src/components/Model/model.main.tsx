@@ -77,8 +77,9 @@ const Model = () => {
         ctx.font = '16px Arial';
         ctx.fillStyle = 'white';
         ctx.fillText(
-          Class[diesease as number],
+          //Class[diesease as number],
           //objects[i].class,
+          'Object',
           objects[i].bbox[0] + 4,
           objects[i].bbox[1] + 16
         );
@@ -329,12 +330,12 @@ const Model = () => {
       };
     }
   };
-  useEffect(() => {}, [startDetecting, startPrediction]);
+  useEffect(() => {}, []);
 
   //detection draw
 
   return (
-    <div className="bg-blue-100 min-h-screen flex flex-col items-center justify-center">
+    <div className="bg-blue-100  flex flex-col min-h-[40rem] justify-center items-center p-12">
       {isloading ? (
         <h1 className="lg:text-2xl font-bold text-blue-800 text-center">
           Loading...
@@ -352,17 +353,17 @@ const Model = () => {
               {useWebcam ? 'Switch to Image' : 'Switch to Webcam'}
             </button>
             {useWebcam ? (
-              <div>
+              <div className="flex flex-col justify-center ">
                 <video
                   ref={videoRef}
                   autoPlay
-                  width="224"
-                  height="224"
-                  className="mt-4 rounded-xl h-full w-full"
+                  width="400"
+                  height="400"
+                  className="mt-4 rounded-xl "
                 ></video>
                 <button
                   onClick={e => captureImage(e)}
-                  className="bg-[#221389] text-white hover:bg-blue-700 p-4 rounded-full"
+                  className="bg-[#221389] text-white hover:bg-blue-700 p-3 rounded-full my-4"
                 >
                   Capture
                 </button>
@@ -426,7 +427,7 @@ const Model = () => {
                   ref={canvasEle}
                   width={300}
                   height={300}
-                  className="rounded"
+                  className="rounded-xl"
                 />
               </>
             )}
@@ -438,13 +439,13 @@ const Model = () => {
           ) : (
             <>
               {prediction !== null && (
-                <div className="mt-4 flex items-center justify-center py-12 gap-4">
+                <div className="mt-4 flex flex-col items-center justify-center py-12 gap-4">
                   <h2 className="text-xl font-bold">Model Prediction:</h2>
                   <p className="text-blue-800 text-xl">
                     {Class[diesease as number]}{' '}
                     {/* {Math.abs((score as number) * 100).toFixed(2)}% */}
-                    <h1>{Summary[diesease as number]}</h1>
                   </p>
+                  <p>{Summary[diesease as number]}</p>
                   <button
                     onClick={downloadPDF}
                     className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
