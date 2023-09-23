@@ -61,7 +61,7 @@ const AccountDetails = () => {
                 focusBorderColor="#1A75FF"
                 size={'md'}
                 fontSize="base"
-                value={'8777028005'}
+                value={user?.phoneNumber}
               />
             </section>
           </div>

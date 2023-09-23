@@ -31,8 +31,8 @@ function Chat() {
   };
 
   return (
-    <div>
-      <div className="chat-box">
+    <div className='flex justify-center items-center w-full h-full text-3xl'>
+      {/* <div className="chat-box">
         {messages.map((msg, index) => (
           <div key={index} className="message">
             {msg.sender}: {msg.text}
@@ -47,7 +47,8 @@ function Chat() {
           onChange={e => setMessage(e.target.value)}
         />
         <button type="submit">Send</button>
-      </form>
+      </form> */}
+      <h1>Commig soon!!</h1>
     </div>
   );
 }

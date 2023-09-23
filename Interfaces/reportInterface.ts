@@ -2,8 +2,12 @@ export default interface IReport {
   patientId: string;
   patientName: string;
   patientAge: number;
-  suspectedDisease: string;
+  suspectedDisease: {
+    diseaseName: string;
+    diseaseDescription: string;
+  };
   diseaseImage: string;
   isVerifiedByDoc: boolean;
-  symptoms: string[];
+  requestedDocId: string;
+  patientPrompt: string[];
 }

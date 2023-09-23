@@ -23,6 +23,7 @@ const CreateDoctorProfile = () => {
   });
 
   const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [fileUrl, setFileUrl] = useState<any>(null);
   const router = useRouter();
   const { authUser } = useAuth();
 
@@ -39,12 +40,11 @@ const CreateDoctorProfile = () => {
   };
 
   const handleUpdateDocData = async () => {
-    // let uploadedImageUrl = await uploadImageToFirebase()
-    // console.log(uploadedImageUrl);
-
+    const signatureUrl = await uploadImageToFirebase()
+    
     const data = {
       docLicense: docData.docLicense as string,
-      docSignature: 'uploadedImageUrl' as string,
+      docSignature: signatureUrl as unknown as string,
       docSpeciality: docData.docSpeciality as string
     };
     await updateUserData(authUser?.uid, data);
@@ -54,6 +54,7 @@ const CreateDoctorProfile = () => {
   const addImagetoPost = (e: any) => {
     const reader = new FileReader();
     if (e.target.files[0]) {
+      setFileUrl(e.target.files[0])
       reader.readAsDataURL(e.target.files[0]);
     }
 
@@ -70,7 +71,7 @@ const CreateDoctorProfile = () => {
     );
 
     const uploadTask =
-      selectedFile && uploadBytesResumable(signatureRef, selectedFile);
+      fileUrl && uploadBytesResumable(signatureRef, fileUrl);
     uploadTask &&
       uploadTask.on(
         'state_changed',
@@ -189,7 +190,7 @@ const CreateDoctorProfile = () => {
 
           <button
             className="btn-secondary w-full rounded-md"
-            // disabled={!validateForm()}
+            disabled={!validateForm()}
             onClick={handleUpdateDocData}
           >
             Submit & Proceed

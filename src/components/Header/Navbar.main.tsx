@@ -78,7 +78,7 @@ const Navbar = () => {
                   </MenuItem>
                   <MenuItem
                     onClick={() =>
-                      router.push('/dashboard?currentTab=E-Clinic')
+                      user.role === "Doctor" ? router.push('/dashboard/doctor-dashboard/?currentTab=Appointments') : router.push('/dashboard/patient-dashboard/?currentTab=E-Clinic')
                     }
                   >
                     Dashboard
