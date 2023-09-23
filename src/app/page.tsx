@@ -5,6 +5,7 @@ import Footer from '@/components/Footer/footer.main';
 import Navbar from '@/components/Header/Navbar.main';
 import Benefits from '@/components/Homepage/Benefits/benefits.main';
 import ContactUs from '@/components/Homepage/ContactUs/contact.main';
+import Subscription from '@/components/Homepage/Subscription/subscription.main';
 import Hero from '@/components/Homepage/Hero.main';
 import Testimonial from '@/components/Homepage/Testimonial/Testimonial.main';
 
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
       <Benefits />
       <Testimonial />
+      <Subscription />
       <ContactUs />
       <Footer />
     </div>

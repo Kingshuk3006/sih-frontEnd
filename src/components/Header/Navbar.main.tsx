@@ -29,6 +29,7 @@ const Navbar = () => {
     { href: '/#home', text: 'Home' },
     { href: '/#benefits', text: 'Benefits' },
     { href: '/#testimonial', text: 'Testimonial' },
+    { href: '/#subscription', text: 'Subscription' },
     { href: '/#contact', text: 'Contact Us' }
   ];
 
