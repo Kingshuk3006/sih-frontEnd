@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function comingsoon() {
-  return <div>comingsoon</div>;
+export default function Comingsoon() {
+  return <div className='flex justify-center items-center w-full h-full'>comingsoon</div>;
 }

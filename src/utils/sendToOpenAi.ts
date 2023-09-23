@@ -6,7 +6,7 @@ interface OpenAIResponse {
 
 export async function sendToOpenAI(message: string): Promise<string> {
   // Replace 'YOUR_OPENAI_API_KEY' with your actual OpenAI API key
-  const apiKey = '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';
+  const apiKey = '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';
 
   const openaiResponse = await fetch(
     'https://api.openai.com/v1/chat/completions',

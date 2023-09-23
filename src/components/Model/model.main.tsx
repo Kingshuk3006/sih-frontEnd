@@ -7,12 +7,20 @@ import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs';
 import { Class, Summary } from '../../database/diesease';
 import { PDFDocument, rgb } from 'pdf-lib';
+
 import { useUser } from '../../../context/usercontext';
 import {
   load as cocoModelLoad,
   ObjectDetection
 } from '@tensorflow-models/coco-ssd';
 import { ClassNames } from '@emotion/react';
+import { useReport } from '../../../context/reportContext';
+import { json } from 'stream/consumers';
+import IReport from '../../../Interfaces/reportInterface';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { storage } from '../../../lib/firebaseConfig';
+import createIssue from '@/functions/report/createReport';
+import { useToast } from '../../../lib/chakraui';
 
 interface DetectedObject {
   bbox: [number, number, number, number];
@@ -35,6 +43,7 @@ const Model = () => {
   const [pdfGenerated, setPdfGenerated] = useState(false);
   const [pdfBlob, setPdfBlob] = useState<any>(null);
   const { user } = useUser();
+  const [imageUploadUrl, setImageUploadUrl] = useState<any>()
 
   //OBJECT DETECTION //
   const canvasEle = useRef<HTMLCanvasElement | null>(null);
@@ -45,6 +54,8 @@ const Model = () => {
   const [detectedObjects, setDetectedObjects] = useState<DetectedObject[]>([]);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { reportData, setReportData } = useReport()
+  const toast = useToast();
 
   const draw = (ctx: CanvasRenderingContext2D, objects: DetectedObject[]) => {
     if (canvasEle.current && imageEle.current) {
@@ -244,6 +255,7 @@ const Model = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
+    setImageUploadUrl(file)
 
     if (file) {
       const imageUrl = URL.createObjectURL(file);
@@ -266,6 +278,7 @@ const Model = () => {
       if (context) {
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
         const capturedImage = canvas.toDataURL('image/jpeg');
+        setUploadedImage(capturedImage);
         setImage(capturedImage);
         setUseWebcam(false); // Switch back to image input mode
         setUploadedImage(capturedImage);
@@ -330,9 +343,104 @@ const Model = () => {
       };
     }
   };
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
+
+  const handleGenerateReport = async () => {
+
+    try{
+
+      let _suspectedDisease = {
+        diseaseName:'',
+        diseaseDescription: ''
+      }
+      _suspectedDisease.diseaseName = Class[diesease as number];
+      _suspectedDisease.diseaseDescription = Summary[diesease as number];
+  
+      let _reporData = {...reportData}
+      let downloadurl = await uploadImageToFirebase()
+      _reporData.suspectedDisease = _suspectedDisease
+      _reporData.patientId = user?.uid as string;
+      _reporData.patientName = user?.name as string;
+      _reporData.patientAge = user?.age as number;
+      _reporData.isVerifiedByDoc = false;
+      _reporData.diseaseImage = downloadurl as unknown as string
+      setReportData(_reporData);
+      
+      createIssue(_reporData)
+
+      toast({
+        title: 'Report generated successfully',
+        description: 'Your report has been generated successfully',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }catch(err){
+
+      toast({
+        title: 'Oops! There ws have been an error',
+        description: 'There was an error generating your report',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-right',
+      });
+    }
+    
+    
+
+  }
 
   //detection draw
+
+  const uploadImageToFirebase = async () => {
+    const date = new Date();
+    const signatureRef = ref(
+      storage,
+      `disease/${date.getTime()}${user?.uid}`
+    );
+
+    const uploadTask =
+      imageUploadUrl && uploadBytesResumable(signatureRef, imageUploadUrl);
+    uploadTask &&
+      uploadTask.on(
+        'state_changed',
+        (snapshot: any) => {
+          const progress = ((snapshot.bytesTransferred / snapshot.totalBytes) *
+            100) as number;
+          console.log(progress);
+          switch (snapshot.state) {
+            case 'paused':
+              console.log('Upload is paused');
+              break;
+            case 'running':
+              console.log('Upload is running');
+              break;
+          }
+        },
+        (error: any) => {
+          switch (error.code) {
+            case 'storage/unauthorized':
+              break;
+            case 'storage/canceled':
+              break;
+
+            case 'storage/unknown':
+              break;
+          }
+        },
+        async () => {
+          await getDownloadURL(uploadTask.snapshot.ref).then(
+            async downloadURLOnUpload => {
+              return downloadURLOnUpload;
+            }
+          );
+        }
+      );
+  };
+
+  
 
   return (
     <div className="bg-blue-100  flex flex-col min-h-[40rem] justify-center items-center p-12">
@@ -420,8 +528,8 @@ const Model = () => {
                   width={300}
                   height={300}
                   className="rounded-xl"
-                  //layout="responsive"
-                  //objectFit="cover"
+                //layout="responsive"
+                //objectFit="cover"
                 />
                 <canvas
                   ref={canvasEle}
@@ -447,10 +555,10 @@ const Model = () => {
                   </p>
                   <p>{Summary[diesease as number]}</p>
                   <button
-                    onClick={downloadPDF}
+                    onClick={handleGenerateReport}
                     className="bg-[#221389] text-white hover:bg-blue-700 w-44 h-12 rounded-full"
                   >
-                    Download Report
+                    Generate Report
                   </button>
                 </div>
               )}
