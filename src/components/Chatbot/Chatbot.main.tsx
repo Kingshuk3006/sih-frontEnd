@@ -1,9 +1,8 @@
-'use client';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-const BotsonicWidget = () => {
+const BotsonicWidget: React.FC = () => {
   useEffect(() => {
-    (function (w: any, d: any, s: any, o: any, f: any, js, fjs) {
+    (function (w: any, d: any, s: any, o: any, f: any, js: HTMLScriptElement, fjs: HTMLScriptElement) {
       w['botsonic_widget'] = o;
       w[o] =
         w[o] ||
@@ -14,15 +13,18 @@ const BotsonicWidget = () => {
       js.id = o;
       js.src = f;
       js.async = 1;
-      fjs.parentNode.insertBefore(js, fjs);
+      fjs.parentNode!.insertBefore(js, fjs);
     })(
       window,
       document,
       'script',
       'Botsonic',
-      'https://widget.writesonic.com/CDN/botsonic.min.js'
+      'https://widget.writesonic.com/CDN/botsonic.min.js',
+      document.createElement('script'),
+      document.getElementsByTagName('script')[0]
     );
-    Botsonic('init', {
+
+    (window as any).Botsonic('init', {
       serviceBaseUrl: 'https://api.botsonic.ai',
       token: 'bf47e39e-e149-4a73-9d63-a73535fb1c03'
     });
